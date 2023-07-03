@@ -20,3 +20,8 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+#range {
+    width: 350px;
+    height: 200px;
+}
