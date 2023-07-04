@@ -8,7 +8,7 @@ namespace CarEnthusiast.Data
         public UserContext(DbContextOptions<UserContext> options) : base(options)
         { }
 
-        public DbSet<UserContext> Users { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<CarDetail> CarDetails { get; set; }
         public DbSet<Car> Cars { get; set; }
 

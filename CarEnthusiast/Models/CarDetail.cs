@@ -8,7 +8,6 @@
         Truck,
         Saloon,
         Luxury
-
     }
 
     public class CarDetail

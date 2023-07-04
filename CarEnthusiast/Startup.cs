@@ -16,6 +16,8 @@ namespace CarEnthusiast
             services.AddDbContext<UserContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString(@"DefaultConnection")));
 
+            //services.AddDatabaseDeveloperPageExceptionFilter();
+
             services.AddControllersWithViews();
         }
     }
