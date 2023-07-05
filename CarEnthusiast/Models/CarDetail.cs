@@ -13,12 +13,7 @@
     public class CarDetail
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
-        public int CarId { get; set; }
-        public DateTime DateAdded { get; set; }
-        public Type? Type { get; set; }
-
-        public User User { get; set; }
-        public Car Car { get; set; }
+        public Type Type { get; set; }
+        public List<Car> Cars { get; set; }
     }
 }

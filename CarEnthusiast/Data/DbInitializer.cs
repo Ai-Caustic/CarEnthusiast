@@ -28,28 +28,28 @@ namespace CarEnthusiast.Data
 
             context.SaveChanges();
 
-            var cars = new Car[]
-            {
-             //   new Car{Make="", Model="", Year="", Image="", Showroom=""}
-            };
+            //var cars = new Car[]
+            //{
+            // //   new Car{Make="", Model="", Year="", Image="", Showroom=""}
+            //};
 
-            foreach (Car c in cars)
-            {
-                context.Cars.Add(c);
-            }
+            //foreach (Car c in cars)
+            //{
+            //    context.Cars.Add(c);
+            //}
 
-            context.SaveChanges();
+            //context.SaveChanges();
 
-            var carDetail = new CarDetail[]
-            {
-              //  new CarDetail{UserId="", CarId="", DateAdded="", Type=Models.Type.Sports}
-            };
+            //var carDetail = new CarDetail[]
+            //{
+            //  //  new CarDetail{UserId="", CarId="", DateAdded="", Type=Models.Type.Sports}
+            //};
 
-            foreach (CarDetail cd in carDetail)
-            {
-                context.CarDetails.Add(cd);
-            }
-            context.SaveChanges();
+            //foreach (CarDetail cd in carDetail)
+            //{
+            //    context.CarDetails.Add(cd);
+            //}
+            //context.SaveChanges();
         }
     }
 }
