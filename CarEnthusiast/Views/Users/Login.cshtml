@@ -1,0 +1,46 @@
+﻿@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+@section css {
+    <link href="@Url.Content("~/css/login.css")" rel="stylesheet" />
+}
+
+<div class="login">
+    <div class="box-form">
+        <div class="left">
+            <div class="overlay">
+                @*<span>
+                    <a href="#">
+                        <i class="fa fa-google" aria-hidden="true"></i> Login with
+                        Google
+                    </a>
+                </span>*@
+            </div>
+        </div>
+
+        <div class="right">
+            <h5>Login</h5>
+            <form role="form" asp-action="Login" asp-controller="Users" method="post">
+                <div class="inputs">
+                    <input type="email" name="Email" asp-for="email" autocomplete="off" placeholder="Email Address" />
+                    <br />
+                    <input type="password" name="Password" asp-for="password" autocomplete="off" placeholder="Password" />
+                </div>
+    
+            <br /><br />
+
+            <div class="remember-me--forget-password">
+                <label>
+                    <input type="checkbox" name="item" checked />
+                    <span class="text-checkbox">Remember me</span>
+                </label>
+                    <a asp-area="" asp-controller="Users" asp-action="Register">Create Your Account</a>
+            </div>
+            <br />
+            <input type="submit" value="Login" class="submit"/>
+            </form>
+        </div>
+    </div>
+</div>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarEnthusiast.Data;
 using CarEnthusiast.Models;
+using System.Web.WebPages;
 
 namespace CarEnthusiast.Controllers
 {
@@ -19,10 +20,51 @@ namespace CarEnthusiast.Controllers
             _context = context;
         }
 
-        // GET: Users
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-              return _context.Users != null ? 
+            return View("Login");
+        }
+
+        // Post: User
+        [HttpPost]
+        public async Task<ActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userdetails = await _context.Users.SingleOrDefaultAsync(m => m.Email == model.email && m.Password == model.password);
+                if (userdetails == null)
+                {
+                    ModelState.AddModelError("Password", "Invalid login attempt");
+                    return View("Index");
+                }
+                HttpContext.Session.SetString("userId", userdetails.Name);
+            }
+            else
+            {
+                return View("Register");
+            }
+
+            // TODO: Add the correct view for after logging in
+            return View("Accounts");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register([Bind("Id,Name,Email,Password,CreatedAt")] User user)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View("Login");
+        }
+
+
+        public async Task<IActionResult> Accounts()
+        {
+            return _context.Users != null ?
                           View(await _context.Users.ToListAsync()) :
                           Problem("Entity set 'UserContext.Users'  is null.");
         }
@@ -45,6 +87,12 @@ namespace CarEnthusiast.Controllers
             return View(user);
         }
 
+        // GET: Users/Login
+        public IActionResult Login()
+        {
+            return View();
+        }
+
         // GET: Users/Create
         public IActionResult Register()
         {
@@ -54,18 +102,6 @@ namespace CarEnthusiast.Controllers
         // POST: Users/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([Bind("Id,Name,Email,Password,CreatedAt")] User user)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
-        }
 
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)

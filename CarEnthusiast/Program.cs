@@ -13,8 +13,6 @@ namespace CarEnthusiast
         public static void Main(string[] args)
         {
 
-            //TODO
-
             var host = CreateHostBuilder(args).Build();
 
             using (var scope = host.Services.CreateScope())
