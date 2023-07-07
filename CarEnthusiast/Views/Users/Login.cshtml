@@ -24,11 +24,11 @@
             <h5>Login</h5>
             <form role="form" asp-action="Login" asp-controller="Users" method="post">
                 <div class="inputs">
-                    <input type="email" name="Email" asp-for="email" autocomplete="off" placeholder="Email Address" />
-                    <span asp-validation-for="email" class="text-danger"></span>
+                    <input type="email" id="login-email" name="Email" asp-for="email" autocomplete="off" placeholder="Email Address" />
+                    <span id="login-span-email" asp-validation-for="email" class="text-danger" ></span>
                     <br />
-                    <input type="password" name="Password" asp-for="password" autocomplete="off" placeholder="Password" />
-                    <span asp-validation-for="password" class="text-danger"></span>
+                    <input type="password" id="login-password" name="Password" asp-for="password" autocomplete="off" placeholder="Password" />
+                    <span id="login-span-password" asp-validation-for="password" class="text-danger"></span>
                 </div>
     
             <br /><br />
@@ -41,7 +41,8 @@
                     <a asp-area="" asp-controller="Users" asp-action="Register">Create Your Account</a>
             </div>
             <br />
-            <input type="submit" value="Login" class="submit"/>
+
+            <input id="submit-login" type="submit" value="Login" class="submit" onclick="validateLogin" />
             </form>
         </div>
     </div>
