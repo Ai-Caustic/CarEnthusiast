@@ -30,7 +30,7 @@ namespace CarEnthusiast
 
             services.AddControllersWithViews();
             services.AddMvc();
-            services.AddMvc(options => options.EnableEndpointRouting = false);
+            //services.AddMvc(options => options.EnableEndpointRouting = false);
         }
 
         [Obsolete]
@@ -56,11 +56,11 @@ namespace CarEnthusiast
 
             app.UseAuthorization();
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "Default",
-                    template: "{controller=Home}/{action=index}/{id?}"
+                    pattern: "{controller=Home}/{action=index}/{id?}"
                     );
             });
 

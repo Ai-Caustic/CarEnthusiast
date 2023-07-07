@@ -1,16 +1,68 @@
-﻿@model CarEnthusiast.Models.User
+﻿@model RegisterViewModel
 
-@{
-    ViewData["Title"] = "Create";
+
+@section css {
+    <link href="@Url.Content("~/css/register.css")" rel="stylesheet" />
 }
 
-<h1>Create</h1>
 
-<h4>User</h4>
+@{
+    ViewData["Title"] = "Register";
+}
+
+
+<body>
+	<!-- main -->
+	<div class="main-w3layouts wrapper">
+		<h1>Register</h1>
+		<div class="main-agileinfo">
+			<div class="agileits-top">
+				<form action="#" method="post">
+					<input class="text" type="text" name="Username" asp-for=Name placeholder="Username" required="">
+					<span asp-validation-for="Name" class="text-danger"></span>
+					<input class="text email" type="email" name="email" asp-for=Email placeholder="Email" required="">
+					<span asp-validation-for="Email" class="text-danger"></span>
+					<input class="text" type="password" name="password" asp-for=Password placeholder="Password" required="">
+					<span asp-validation-for="Password" class="text-danger"></span>
+					<input class="text w3lpass" type="password" name="password" asp-for=ConfirmPassword placeholder="Confirm Password" required="">
+					<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+					<div class="wthree-text">
+						<label class="anim">
+							<input type="checkbox" class="checkbox" required="">
+							<span>I Agree To The Terms & Conditions</span>
+						</label>
+						<div class="clear"> </div>
+					</div>
+					<input type="submit" value="SIGNUP">
+				</form>
+				<p>Don't have an Account? <a asp-area="" asp-controller="Users" asp-action="Login"> Login Now!</a></p>
+			</div>
+		</div>
+		<!-- //copyright -->
+		<ul class="colorlib-bubbles">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<!-- //main -->
+</body>
+
+@*separating block*@
+
+@*<h1>Create</h1>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Register">
+        <form role="form" asp-action="Register" asp-controller="Users" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -28,9 +80,9 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                <label asp-for="ConfirmPassword" class="control-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -38,7 +90,7 @@
         </form>
     </div>
 </div>
-
+*@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

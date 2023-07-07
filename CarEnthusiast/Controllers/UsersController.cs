@@ -35,7 +35,7 @@ namespace CarEnthusiast.Controllers
                 if (userdetails == null)
                 {
                     ModelState.AddModelError("Password", "Invalid login attempt");
-                    return View("Index");
+                    return View("Register");
                 }
                 HttpContext.Session.SetString("userId", userdetails.Name);
             }
@@ -50,14 +50,33 @@ namespace CarEnthusiast.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register([Bind("Id,Name,Email,Password,CreatedAt")] User user)
-        {
-            if (ModelState.IsValid)
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {   try
             {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    User user = new User
+                    {
+                        Name = model.Name,
+                        Email = model.Email,
+                        CreatedAt = model.CreatedAt,
+                        Password = model.Password
+                    };
+                    _context.Add(user);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
+            catch (DbUpdateException ex)
+            {
+                // Log the error (uncomment ex and write an error)
+                ModelState.AddModelError(ex.ToString(), "Unable to save changes");
+                string messages = string.Join("; ", ModelState.Values
+                                        .SelectMany(x => x.Errors)
+                                        .Select(x => x.ErrorMessage));      
+                
+            }
+            
             return View("Login");
         }
 
