@@ -1,11 +1,15 @@
-﻿html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, dl, dt, dd, ol, nav ul, nav li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+﻿body {
     margin: 0;
     padding: 0;
     border: 0;
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
-    background-color: #333333;
+    background: white !important;
+    background-color: #333333 !important;
+    background-size: cover;
+    background-attachment: fixed;
+    font-family: 'Roboto', sans-serif;
 }
 
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
@@ -102,17 +106,6 @@ img {
 }
 
 /*-- end reset --*/
-body {
-    background: white;
-    /* fallback for old browsers */
-    background: -webkit-linear-gradient(to top, #76b852, #8DC26F);
-    background: -moz-linear-gradient(to top, #76b852, #8DC26F);
-    background: -o-linear-gradient(to top, #76b852, #8DC26F);
-    background: linear-gradient(to top, #76b852, #8DC26F);
-    background-size: cover;
-    background-attachment: fixed;
-    font-family: 'Roboto', sans-serif;
-}
 
 h1 {
     font-size: 4em;
@@ -134,6 +127,19 @@ h1 {
     margin: 3em auto;
     background: rgba(0, 0, 0, 0.18);
     background-size: cover;
+}
+
+#submit-register {
+    float: right;
+    color: #333333;
+    font-size: 16px;
+    padding: 12px 35px;
+    border-radius: 50px;
+    display: inline-block;
+    border: 0;
+    outline: 0;
+    box-shadow: 0px 4px 20px 0px #49c628a6;
+    background-image: linear-gradient(135deg, #70f570 10%, #49c628 100%);
 }
 
 .agileits-top {
@@ -182,7 +188,7 @@ input.email, input.text.w3lpass {
     }
 
 ::-webkit-input-placeholder {
-    color: #fff;
+    color: #fff!important;
     font-weight: 100;
 }
 
@@ -225,7 +231,7 @@ input[type="submit"] {
 
 .agileits-top p {
     font-size: 1em;
-    color:#333333;
+    color: #333333;
     text-align: center;
     letter-spacing: 1px;
     font-weight: 300;
@@ -356,7 +362,6 @@ input.checkbox {
 
 .colorlib-bubbles {
     background-color: #333333;
-
     position: absolute;
     top: 0;
     left: 0;

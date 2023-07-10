@@ -35,13 +35,14 @@ namespace CarEnthusiast.Controllers
                 if (userdetails == null)
                 {
                     ModelState.AddModelError("Password", "Invalid login attempt");
-                    return View("Register");
+                    return View("Login");
                 }
                 HttpContext.Session.SetString("userId", userdetails.Name);
             }
             else
             {
-                return View("Register");
+                ModelState.AddModelError("Password", "Fill in the fields");
+                return View("Login");
             }
 
             // TODO: Add the correct view for after logging in
@@ -51,8 +52,7 @@ namespace CarEnthusiast.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
-        {   try
-            {
+        {  
                 if (ModelState.IsValid)
                 {
                     User user = new User
@@ -64,19 +64,14 @@ namespace CarEnthusiast.Controllers
                     };
                     _context.Add(user);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    //return RedirectToAction(nameof(Index));
                 }
-            }
-            catch (DbUpdateException ex)
+                else
             {
-                // Log the error (uncomment ex and write an error)
-                ModelState.AddModelError(ex.ToString(), "Unable to save changes");
-                string messages = string.Join("; ", ModelState.Values
-                                        .SelectMany(x => x.Errors)
-                                        .Select(x => x.ErrorMessage));      
-                
+                ModelState.AddModelError("ConfirmPassword", "Fill in the fields");
+                return View("Register");
             }
-            
+  
             return View("Login");
         }
 

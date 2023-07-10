@@ -22,9 +22,8 @@ namespace CarEnthusiast.Models
         [StringLength(10, MinimumLength = 3, ErrorMessage = "Invalid Password")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Passwords need to match")]
+        
         [NotMapped] // Doesn't affect Database
-        [Compare("Password")]
         public string ConfirmPassword { get; set; }
 
     }
