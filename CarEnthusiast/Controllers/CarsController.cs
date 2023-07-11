@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -56,15 +57,34 @@ namespace CarEnthusiast.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Make,Model,Year,Image,Showroom")] Car car)
+        public async Task<IActionResult> Create(CarViewModel car, IFormFile Image)
         {
+            //string imagePath = "~/Assets/Toy.jpg";
             if (ModelState.IsValid)
             {
-                _context.Add(car);
+                if (Image != null && Image.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await Image.CopyToAsync(memoryStream);
+
+                        car.Image = memoryStream.ToArray();
+                    }
+                }
+                Car model = new Car
+                {
+                    Make = car.Make,
+                    Model = car.Model,
+                    Year = car.Year,
+                    Image = car.Image,
+                    Showroom = car.Showroom
+                };
+
+                _context.Add(model);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(car);
+            return View("Create");
         }
 
         // GET: Cars/Edit/5

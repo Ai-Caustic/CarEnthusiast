@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarEnthusiast.Data;
 using CarEnthusiast.Models;
+using Microsoft.AspNetCore.Identity;
 using System.Web.WebPages;
+using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Manage.Internal;
 
 namespace CarEnthusiast.Controllers
 {
@@ -209,5 +211,11 @@ namespace CarEnthusiast.Controllers
         {
           return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+        //public async Task<IActionResult> OnPostAsync (string returnUrl = null)
+        //{
+        //    returnUrl = returnUrl ?? Url.Content("/");
+        //    ExternalLoginsModel = (await _signInManager.GetExternalLoginsAsync());
+        //}
     }
 }
