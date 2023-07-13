@@ -14,19 +14,19 @@ namespace CarEnthusiast.Data
             if (context.Users.Any())
                 return; //DB has been seeded
 
-            var users = new User[]
-                {
-                new User{Name="Bison", Email="slimeto@gmail.com", Password="slimeto", CreatedAt=DateTime.Now},
-                new User{Name="Amber", Email="boutubuss@gmail.com", Password="ambatukam", CreatedAt=DateTime.Now},
-                new User{Name="Elvin", Email="somi@gmail.com", Password="ambatukam", CreatedAt=DateTime.Now}
-                };
+            //var users = new User[]
+            //    {
+            //    new User{Name="Bison", Email="slimeto@gmail.com", Password="slimeto", CreatedAt=DateTime.Now},
+            //    new User{Name="Amber", Email="boutubuss@gmail.com", Password="ambatukam", CreatedAt=DateTime.Now},
+            //    new User{Name="Elvin", Email="somi@gmail.com", Password="ambatukam", CreatedAt=DateTime.Now}
+            //    };
 
-            foreach (User u in users)
-            {
-                context.Users.Add(u);
-            }
+            //foreach (User u in users)
+            //{
+            //    context.Users.Add(u);
+            //}
 
-            context.SaveChanges();
+            //context.SaveChanges();
 
             //var cars = new Car[]
             //{

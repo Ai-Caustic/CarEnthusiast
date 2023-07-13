@@ -1,5 +1,6 @@
 ﻿using CarEnthusiast.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Diagnostics;
 
 namespace CarEnthusiast.Controllers
@@ -17,6 +18,7 @@ namespace CarEnthusiast.Controllers
         {
             return View();
         }
+
 
         public IActionResult Privacy()
         {
