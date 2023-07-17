@@ -4,20 +4,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CarEnthusiast.Models
 {
-    public class User : IdentityUser<int>
+    public class User : IdentityUser
     {
-       // public int Id { get; set; }
-       // public required string Name { get; set; }
-       // public required string Email { get; set; }
-        public required string Password { get; set; }
-        public DateTime CreatedAt { get; set; }
 
-        public List<Car>? Cars { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public ICollection<Car> Cars { get; set; } = new List<Car>();
+
+        
+        //public virtual ICollection<Message> Messages { get; set; }
 
         //public int CarId { get; set; }
         //public ICollection<Car>? Cars { get; set; }
     }
 
-    public class Role : IdentityRole<int>
-    { }
+
 }

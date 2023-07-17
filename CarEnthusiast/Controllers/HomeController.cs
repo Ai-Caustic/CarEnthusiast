@@ -1,7 +1,10 @@
 ﻿using CarEnthusiast.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Diagnostics;
+using CarEnthusiast.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarEnthusiast.Controllers
 {
@@ -9,11 +12,16 @@ namespace CarEnthusiast.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public readonly UserManager<User> _userManager;
+
+        public readonly UserContext _context;
+
+        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, UserContext context)
         {
             _logger = logger;
+            _userManager = userManager;
+            _context = context;
         }
-
         public IActionResult Index()
         {
             return View();

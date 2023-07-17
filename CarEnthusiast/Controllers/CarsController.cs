@@ -8,16 +8,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CarEnthusiast.Data;
 using CarEnthusiast.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace CarEnthusiast.Controllers
 {
+    [Authorize]
     public class CarsController : Controller
     {
         private readonly UserContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public CarsController(UserContext context)
+        public CarsController(UserContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Cars
@@ -47,6 +52,7 @@ namespace CarEnthusiast.Controllers
         }
 
         // GET: Cars/Create
+
         public IActionResult Create()
         {
             return View();
@@ -71,20 +77,44 @@ namespace CarEnthusiast.Controllers
                         car.Image = memoryStream.ToArray();
                     }
                 }
+
+                var user = await _userManager.GetUserAsync(User);
+
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
                 Car model = new Car
                 {
                     Make = car.Make,
                     Model = car.Model,
                     Year = car.Year,
                     Image = car.Image,
-                    Showroom = car.Showroom
+                    Showroom = car.Showroom,
+                    UserId = user.Id // Set the id of the car to the currently logged in user's Id
                 };
 
                 _context.Add(model);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));    
             }
             return View("Create");
+        }
+
+        public IActionResult GetImage(int Id)
+        {
+            var car = _context.Cars.FirstOrDefault(c => c.Id == Id);
+
+            if (car != null && car.Image != null)
+            {
+                return File(car.Image, "image/jpg"); // Adjust the MIME type according to your image format
+            }
+            else
+            {
+                return null; //Handles the case when the image is not found
+            }
+            
         }
 
         // GET: Cars/Edit/5

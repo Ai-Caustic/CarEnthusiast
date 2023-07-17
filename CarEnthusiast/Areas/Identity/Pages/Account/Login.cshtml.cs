@@ -8,13 +8,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using CarEnthusiast.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using CarEnthusiast.Models;
 
 namespace CarEnthusiast.Areas.Identity.Pages.Account
 {
@@ -116,7 +116,7 @@ namespace CarEnthusiast.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    return LocalRedirect("~/Cars/Create");
                 }
                 if (result.RequiresTwoFactor)
                 {

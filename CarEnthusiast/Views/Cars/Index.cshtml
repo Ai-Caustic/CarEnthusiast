@@ -4,7 +4,9 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+
+
+<h1>Cars</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -43,8 +45,15 @@
                 @Html.DisplayFor(modelItem => item.Year)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Image)
-            </td>
+               @if (item.Image != null)
+                    {
+                        <img src="@Url.Action("GetImage", "Cars", new { id = item.Id })" />
+                    }
+                    else
+                    {
+                        <span>No image available</span>
+                    }
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Showroom)
             </td>

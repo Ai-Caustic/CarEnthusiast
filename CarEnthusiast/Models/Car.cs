@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace CarEnthusiast.Models
 {
@@ -11,7 +12,8 @@ namespace CarEnthusiast.Models
         public byte[]? Image { get; set; }
         public string? Showroom { get; set; }
 
+        public string UserId { get; set; }
         public User User { get; set; }
-        public List<CarDetail> CarDetails { get; set; }
+        //public List<CarDetail> CarDetails { get; set; }
     }
 }
