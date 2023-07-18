@@ -1,14 +1,68 @@
-﻿@model IEnumerable<CarEnthusiast.Models.Car>
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> userManager
+@model IEnumerable<CarEnthusiast.Models.Car>
 
 @{
     ViewData["Title"] = "Index";
 }
 
+@{
+    var user = await userManager.GetUserAsync(User);
+    var userId = user?.Id;
+}
+
+@{
+    var userCars = Model.Where(item => item.UserId == userId);
+}
 
 
-<h1>Cars</h1>
 
-<p>
+
+
+
+<h3 class="text-center">Collection</h3>
+@foreach (var item in userCars)
+{
+    <div class="card" style="width: 25rem;">
+        <div class="card-header">
+            <h2 class="card-title">@Html.DisplayFor(modelItem => item.Make)</h2>
+        </div>
+        @if (item.Image != null)
+        {
+            <img class="card-img-top" src="@Url.Action("GetImage", "Cars", new { id = item.Id })" />
+        }
+        else
+        {
+            <span>No image available</span>
+        }
+        <div class="card-body">
+            <div class="card-text">
+                <div class="row">
+                    <div class="col-6">
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Model)</p>
+                    </div>
+                    <div class="col-6">
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Year)</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Showroom)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+        </div>
+    </div>
+    
+}
+
+
+@*<p>
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
@@ -33,36 +87,4 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Make)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Model)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Year)
-            </td>
-            <td>
-               @if (item.Image != null)
-                    {
-                        <img src="@Url.Action("GetImage", "Cars", new { id = item.Id })" />
-                    }
-                    else
-                    {
-                        <span>No image available</span>
-                    }
-                </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Showroom)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+</table>*@

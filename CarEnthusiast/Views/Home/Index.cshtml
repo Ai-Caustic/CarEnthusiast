@@ -1,14 +1,16 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@page
 
-@section css {
-    <link href="@Url.Content("~/css/landingpage.css")" rel="stylesheet" />
-}
+<h1 class="text-center">Car Enthusiast</h1>
 
-<div class="jumbotron">
-    <h1 class="display-4">Welcome</h1>
-</div>
-
-<h3>CAR ENTHUSIAST</h3>
+        <div class="row">
+            <div class="col">
+                <h3 class="welcome-text text-center">Welcome to a world of <strong>Cars</strong></h3>
+        </div>
+    </div>
+<div class="row justify-content-center index">
+        <div class="col-6 justify-content-center">     
+            <a class="index-button" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            <a class="index-button" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </div>
+    </div>
 

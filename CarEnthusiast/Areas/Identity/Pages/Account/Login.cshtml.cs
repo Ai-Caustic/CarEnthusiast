@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using CarEnthusiast.Models;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CarEnthusiast.Areas.Identity.Pages.Account
 {
@@ -116,7 +117,7 @@ namespace CarEnthusiast.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect("~/Cars/Create");
+                    return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {

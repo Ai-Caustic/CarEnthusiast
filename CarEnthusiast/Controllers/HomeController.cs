@@ -15,12 +15,15 @@ namespace CarEnthusiast.Controllers
         public readonly UserManager<User> _userManager;
 
         public readonly UserContext _context;
+        
+        private readonly SignInManager<User> _signInManager;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, UserContext context)
+        public HomeController(ILogger<HomeController> logger, UserManager<User> userManager, UserContext context, SignInManager<User> signInManager)
         {
             _logger = logger;
             _userManager = userManager;
             _context = context;
+            _signInManager = signInManager;
         }
         public IActionResult Index()
         {
@@ -32,6 +35,28 @@ namespace CarEnthusiast.Controllers
         {
             return View();
         }
+
+        public IActionResult ChatHub()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> Logout(string returnUrl = null)
+        {
+            await _signInManager.SignOutAsync();
+            _logger.LogInformation("User Logged Out");
+            if (returnUrl != null)
+            {
+                return LocalRedirect(returnUrl);
+            }
+            else
+            {
+                // This needs to be a redirect so that the browser performs a new
+                // request and the identity for the user gets updated.
+                return RedirectToPage("/Index");
+            }
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

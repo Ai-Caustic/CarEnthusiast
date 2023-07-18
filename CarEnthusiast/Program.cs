@@ -8,13 +8,14 @@ using CarEnthusiast.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSignalR();
+
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSession(options => options.IdleTimeout = TimeSpan.FromMinutes(30));
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<UserContext>(options =>
     options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddRazorPages();
+builder.Services.AddSignalR();
 
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -48,8 +49,9 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.HttpOnly = false;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
-    options.LoginPath = "/Areas/Identity/Pages/Account/Login";
-    options.AccessDeniedPath = "/Views/Shared/Error";
+    options.LoginPath = "/Identity/Account/Login";
+    options.LogoutPath = "/Identity/Account/Logout";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
     options.SlidingExpiration = true;
 });
 
@@ -76,7 +78,10 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapHub<ChatHub>("/Views/Home/ChatHub");
+
+app.MapHub<ChatHub>("ChatHub");
+
+//app.MapAreaControllerRoute
 
 app.MapControllerRoute(
     name: "default",
