@@ -29,30 +29,3 @@ body {
 .button-container index {
     margin-top: 50px;
 }
-
-.index{
-    margin-top: 20%;
-    margin-left: 20%;
-}
-
-.welcome-text
-{
-    margin-top: 10%;
-}
-
-.index a {
-    display: inline-block;
-    padding: 12px 24px;
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    color: #fff;
-    background-color: #333;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
-
-    .index a:hover {
-        background-color: #555;
-    }

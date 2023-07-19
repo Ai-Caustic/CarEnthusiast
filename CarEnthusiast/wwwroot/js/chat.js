@@ -1,7 +1,7 @@
 ﻿var connection = new signalR.HubConnectionBuilder().withUrl("/ChatHub").build();
 
 //Disable the send button until connection is established.
-document.getElementById("sendButton").disabled = true;
+//document.getElementById("sendButton").disabled = true;
 
 connection.on("ReceiveMessage", function (user, message) {
     var li = document.createElement("li");

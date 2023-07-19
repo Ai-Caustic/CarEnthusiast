@@ -1,16 +1,67 @@
-﻿@page
+﻿@{
+    Layout = null;
+    Layout = "";
+}
 
-<h1 class="text-center">Car Enthusiast</h1>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="~/css/lp.css" />
 
-        <div class="row">
-            <div class="col">
-                <h3 class="welcome-text text-center">Welcome to a world of <strong>Cars</strong></h3>
+
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Car Enthusiast</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="Cars" asp-action="Index">Cars</a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-<div class="row justify-content-center index">
-        <div class="col-6 justify-content-center">     
+    </nav>
+</header>
+<div class="content">
+    <h1 class="jumbotron text-xxl-center">
+        <lord-icon src="https://cdn.lordicon.com/ckuogwdx.json"
+                   trigger="hover"
+                   colors="primary:#121331,secondary:#08a88a"
+                   style="width:100px;height:50px;padding-top:10px;">
+        </lord-icon>
+        Welcome to a world of cars
+        <lord-icon src="https://cdn.lordicon.com/ckuogwdx.json"
+                   trigger="hover"
+                   colors="primary:#121331,secondary:#08a88a"
+                   style="width:100px;height:50px;padding-top:10px;">
+        </lord-icon>
+    </h1>
+    <div class="row justify-content-center index">
+        <div class="col-6 justify-content-center">
             <a class="index-button" asp-area="Identity" asp-page="/Account/Login">Login</a>
             <a class="index-button" asp-area="Identity" asp-page="/Account/Register">Register</a>
         </div>
     </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.lordicon.com/bhenfmcm.js"></script>
 

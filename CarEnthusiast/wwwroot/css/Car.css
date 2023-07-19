@@ -1,0 +1,43 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Lobster+Two&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display+SC&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cabin+Sketch&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Averia+Serif+Libre&display=swap');
+
+
+.jumbotron {
+    color: navajowhite;
+    background-color: black;
+    height: 10%;
+    padding-top: 15px;
+    font-family: 'Lobster Two', cursive;
+}
+
+.card-title {
+    font-family: 'Cabin Sketch', cursive;
+    font-weight: bolder;
+}
+
+.card-body, .card-footer, .card-header {
+    background-color: #333333;
+}
+
+.card-header h2 {
+    color: gold;
+}
+.card-footer a {
+    color: limegreen;
+}
+
+.name {
+    color: white;
+    font-family: "Playfair Display Sc", serif;
+    font-size: larger;
+    font-weight: bold;
+}
+
+.desc {
+    color: navajowhite;
+    font-family: 'Averia Serif Libre', cursive;
+    font-size: larger;
+    font-weight: bold;
+}
