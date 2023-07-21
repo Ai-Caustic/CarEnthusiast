@@ -70,13 +70,22 @@ namespace CarEnthusiast.Controllers
             {
                 if (Image != null && Image.Length > 0)
                 {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await Image.CopyToAsync(memoryStream);
+                    using var memoryStream = new MemoryStream();
+                    await Image.CopyToAsync(memoryStream);
 
-                        car.Image = memoryStream.ToArray();
-                    }
+                    car.Image = memoryStream.ToArray();
                 }
+                //else
+                //{
+                //    using (var memoryStream = new MemoryStream())
+                //    {
+                //        imagePath.CopyTo(memoryStream);
+
+                //        car.Image = memoryStream.ToArray();
+                //    }
+                        
+
+                //}
 
                 var user = await _userManager.GetUserAsync(User);
 
@@ -85,7 +94,7 @@ namespace CarEnthusiast.Controllers
                     return NotFound();
                 }
 
-                Car model = new Car
+                Car model = new()
                 {
                     Make = car.Make,
                     Model = car.Model,
