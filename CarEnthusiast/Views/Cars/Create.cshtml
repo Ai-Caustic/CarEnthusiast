@@ -2,13 +2,49 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = null;
 }
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="~/css/addCar.css" />
 <div class="card">
     <div class="card-header">
         <h3 class="card-title text-center">Add a car</h3>
     </div>
-    <form role="form" asp-action="Create" asp-controller="Cars" enctype="multipart/form-data" method="post">
+    @using (Html.BeginForm("Create", "Cars", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="form-group">
+            @Html.LabelFor(m => m.Make)
+            @Html.TextBoxFor(m => m.Make, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Make, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Model)
+            @Html.TextBoxFor(m => m.Model, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Model, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Year)
+            @Html.TextBoxFor(m => m.Year, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Year, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Showroom)
+            @Html.TextBoxFor(m => m.Showroom, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Showroom, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Uploaded Images")
+            <input type="file" name="UploadedImages" accept="image/*" multiple />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create</button>
+    }
+   @* <form role="form" class="custom__form" asp-action="Create" asp-controller="Cars" enctype="multipart/form-data" method="post">
     <div class="card-body">
         <table class="table">
             <tr>
@@ -43,9 +79,19 @@
                     <p>Image</p>
                 </td>
                 <td>
+                    <div class="custom__image-container">
+                        <label id="add-img-label" for="add-single-img">+</label>
+                        <input type="file" name="UploadedImages" asp-for=UploadedImages id="add-single-img" accept="image/*" multiple />
+                            <span asp-validation-for="UploadedImages" class="text-danger"></span>
+                    </div>
+                </td>
+                <td>
+                        <div id="custom__print-files"></div>
+                </td>
+               @* <td>
                         <input type="file" name="Image" asp-for="Image" class="form-control w-50" accept="image/*" />
                         <span asp-validation-for="Image" class="text-danger"></span>
-                </td>
+                </td> //Insert end comment here
             </tr>
             <tr>
                 <td>
@@ -59,9 +105,9 @@
         </table>
     </div>
     <div class="card-footer">
-            <input type="submit" value="Create" class="btn btn-primary" />
+            <input id="car-submit" type="submit" value="Create" class="btn btn-primary" />
     </div>
-    </form>
+    </form>*@
 
 </div>
 
@@ -69,6 +115,10 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+
+<script src="~/js/image.js" defer></script>
+<script src="/_framework/aspnetcore-browser-refresh.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

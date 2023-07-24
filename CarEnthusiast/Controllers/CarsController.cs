@@ -63,30 +63,11 @@ namespace CarEnthusiast.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CarViewModel car, IFormFile Image)
+        public async Task<IActionResult> Create(CarViewModel carViewModel)
         {
-            //string imagePath = "~/Assets/Toy.jpg";
+
             if (ModelState.IsValid)
             {
-                if (Image != null && Image.Length > 0)
-                {
-                    using var memoryStream = new MemoryStream();
-                    await Image.CopyToAsync(memoryStream);
-
-                    car.Image = memoryStream.ToArray();
-                }
-                //else
-                //{
-                //    using (var memoryStream = new MemoryStream())
-                //    {
-                //        imagePath.CopyTo(memoryStream);
-
-                //        car.Image = memoryStream.ToArray();
-                //    }
-                        
-
-                //}
-
                 var user = await _userManager.GetUserAsync(User);
 
                 if (user == null)
@@ -94,20 +75,67 @@ namespace CarEnthusiast.Controllers
                     return NotFound();
                 }
 
-                Car model = new()
+                if (carViewModel.UploadedImages != null && carViewModel.UploadedImages.Count > 1)
                 {
-                    Make = car.Make,
-                    Model = car.Model,
-                    Year = car.Year,
-                    Image = car.Image,
-                    Showroom = car.Showroom,
-                    UserId = user.Id // Set the id of the car to the currently logged in user's Id
-                };
+                    // If multiple images are uploaded, store them in the CarImage Table
+                    var car = new Car
+                    {
+                        Make = carViewModel.Make,
+                        Model = carViewModel.Model,
+                        Year = carViewModel.Year,
+                        Showroom = carViewModel.Showroom,
+                        UserId = user.Id
+                    };
 
-                _context.Add(model);
+                    foreach (var uploadedImage in carViewModel.UploadedImages)
+                    {
+                        if (uploadedImage != null && uploadedImage.Length > 0)
+                        {
+                            using var memoryStream = new MemoryStream();
+                            await uploadedImage.CopyToAsync(memoryStream);
+
+                            var carImage = new CarImage
+                            {
+                                ImageData = memoryStream.ToArray(),
+                                FileName = uploadedImage.FileName
+                            };
+
+                            car.CarImages.Add(carImage);
+                        }
+                    }
+
+                    _context.Cars.Add(car);
+                }
+                else
+                {
+                    // If only one image is uploaded, store it in the Car table as a byte array
+                    var uploadedImage = carViewModel.UploadedImages?.FirstOrDefault();
+
+                    if (uploadedImage != null && uploadedImage.Length > 0)
+                    {
+                        using var memoryStream = new MemoryStream();
+                        await uploadedImage.CopyToAsync(memoryStream);
+
+                        var car = new Car
+                        {
+                            Make = carViewModel.Make,
+                            Model = carViewModel.Model,
+                            Year = carViewModel.Year,
+                            Showroom = carViewModel.Showroom,
+                            UserId = user.Id,
+                            Image = memoryStream.ToArray()
+                        };
+
+                        _context.Cars.Add(car);
+                    }
+
+                }
+
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));    
+
+                return RedirectToAction(nameof(Index));
             }
+
             return View("Create");
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CarEnthusiast.Models
 {
@@ -13,11 +14,12 @@ namespace CarEnthusiast.Models
         [Required]
         public DateTime Year { get; set; }
 
-        
-        public byte[]? Image { get; set; }
-
 
         public string? Showroom { get; set; }
+
+
+        public List<IFormFile> UploadedImages { get; set; }
+
 
     }
 }

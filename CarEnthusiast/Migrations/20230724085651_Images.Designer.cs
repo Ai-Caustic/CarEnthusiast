@@ -4,6 +4,7 @@ using CarEnthusiast.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarEnthusiast.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20230724085651_Images")]
+    partial class Images
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,7 +84,7 @@ namespace CarEnthusiast.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.ToTable("CarImage", (string)null);
+                    b.ToTable("CarImage");
                 });
 
             modelBuilder.Entity("CarEnthusiast.Models.Message", b =>
@@ -333,7 +336,7 @@ namespace CarEnthusiast.Migrations
             modelBuilder.Entity("CarEnthusiast.Models.CarImage", b =>
                 {
                     b.HasOne("CarEnthusiast.Models.Car", "Car")
-                        .WithMany()
+                        .WithMany("Images")
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -401,6 +404,11 @@ namespace CarEnthusiast.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CarEnthusiast.Models.Car", b =>
+                {
+                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("CarEnthusiast.Models.User", b =>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 namespace CarEnthusiast.Models
@@ -14,6 +15,8 @@ namespace CarEnthusiast.Models
 
         public string UserId { get; set; }
         public User User { get; set; }
+       
+        public List<CarImage> CarImages { get; set; } = new List<CarImage>();
         //public List<CarDetail> CarDetails { get; set; }
     }
 }

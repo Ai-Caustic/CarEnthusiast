@@ -13,6 +13,7 @@ namespace CarEnthusiast.Data
         public DbSet<User> User { get; set; }
         public DbSet<Car> Cars { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<CarImage> CarImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,6 +25,7 @@ namespace CarEnthusiast.Data
                 //.HasForeignKey(a => a.UserId);
             //modelBuilder.Entity<CarDetail>().ToTable("CarDetail");
             modelBuilder.Entity<Car>().ToTable("Car");
+            modelBuilder.Entity<CarImage>().ToTable("CarImage");
         }
     }
 }
