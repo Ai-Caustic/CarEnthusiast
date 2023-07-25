@@ -63,7 +63,7 @@
                     <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+                    <button id="registerSubmit" type="submit" class="btn-primary">Register</button>
                 </div>
                 <div class="already">
                     <p>
@@ -71,10 +71,39 @@
                     </p>
                 </div>
 
-
             </form>
+
         </div>
     </div>
+</section>
+<section>
+    <hr />
+    @{
+        if ((Model.ExternalLogins?.Count ?? 0) == 0)
+        {
+            <div>
+                <p>
+                    There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
+                        article
+                        about setting up this ASP.NET application to support logging in via external services
+                    </a>.
+                </p>
+            </div>
+        }
+        else
+        {
+            <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="">
+                <div class="text-center">
+                    <p class="text-center">
+                        @foreach (var provider in Model.ExternalLogins!)
+                        {
+                            <button type="submit" class="btn btn-primary google" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><img src="~/Assets/google.svg" class="googleIco" />@provider.DisplayName</button>
+                        }
+                    </p>
+                </div>
+            </form>
+        }
+    }
 </section>
 
 

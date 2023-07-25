@@ -99,3 +99,15 @@
   text-decoration: none;
   font-weight: bolder;
 } */
+
+.google {
+    background-color: white;
+    color: black;
+    border: 1px solid black; 
+}
+.googleIco {
+    position: relative;
+    height: 0.8em;
+    margin-right: 10px;
+    top: 0px;
+}

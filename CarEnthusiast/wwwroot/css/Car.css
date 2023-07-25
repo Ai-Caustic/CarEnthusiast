@@ -41,3 +41,9 @@
     font-size: larger;
     font-weight: bold;
 }
+
+.custom-carousel-img
+{
+    height: 300px;
+    object-fit: cover;
+}

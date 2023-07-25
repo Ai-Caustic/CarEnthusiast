@@ -28,9 +28,19 @@ namespace CarEnthusiast.Controllers
         // GET: Cars
         public async Task<IActionResult> Index()
         {
-              return _context.Cars != null ? 
-                          View(await _context.Cars.ToListAsync()) :
-                          Problem("Entity set 'UserContext.Cars'  is null.");
+            //return _context.Cars != null ? 
+            //            View(await _context.Cars.ToListAsync()) :
+            //            Problem("Entity set 'UserContext.Cars'  is null.");
+            var user = await _userManager.GetUserAsync(User);
+            var userId = user?.Id;
+
+            var userCars = _context.Cars
+                .Include(c => c.CarImages) // Include the CarImages navigation property
+                .Where(c => c.UserId == userId)
+                .ToList();
+
+            return View(userCars);
+
         }
 
         // GET: Cars/Details/5
@@ -139,19 +149,45 @@ namespace CarEnthusiast.Controllers
             return View("Create");
         }
 
-        public IActionResult GetImage(int Id)
+        public IActionResult GetImage(int Id, int imageIndex = 0)
         {
-            var car = _context.Cars.FirstOrDefault(c => c.Id == Id);
+            //var car = _context.Cars.FirstOrDefault(c => c.Id == Id);
+            var car = _context.Cars.Include(c => c.CarImages).FirstOrDefault(c => c.Id == Id);
 
-            if (car != null && car.Image != null)
+            if (car != null && car.CarImages != null && car.CarImages.Count > 0)
             {
-                return File(car.Image, "image/jpg"); // Adjust the MIME type according to your image format
+                if (car.CarImages.Count > 1 && imageIndex >= 0 && imageIndex < car.CarImages.Count)
+                {
+                    // If the car has multiple images in CarImage table and the imageINdex is valid,return the image specified
+                    var image = car.CarImages[imageIndex];
+                    return File(image.ImageData, "image/jpg");
+                }
+                else
+                {
+                    // If the car has only one image in the CarImage table or the provided index is invalid,
+                    // return the first image from the CarImages list (index 0).
+                    var firstImage = car.CarImages[0];
+                    return File(firstImage.ImageData, "image/jpg");
+                }
             }
-            else
+            else if (car != null && car.Image != null)
             {
-                return null; //Handles the case when the image is not found
+                // If the car has only one image stored directly in the Car table, return that image
+                return File(car.Image, "image/jpg");
             }
-            
+
+
+            //if (car != null && car.Image != null)
+            //{
+            //    return File(car.Image, "image/jpg"); // Adjust the MIME type according to your image format
+            //}
+            //else
+            //{
+            //    return null; //Handles the case when the image is not found
+            //}
+            var defaultImage = "~/Assets/Toy.jpg";
+            return File(defaultImage, "image/jpg");
+
         }
 
         // GET: Cars/Edit/5

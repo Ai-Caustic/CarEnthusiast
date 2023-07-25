@@ -17,9 +17,9 @@ namespace CarEnthusiast.Models
 
         public string? Showroom { get; set; }
 
-
+        //Property to hold the Carimages
         public List<IFormFile> UploadedImages { get; set; }
 
-
+     
     }
 }

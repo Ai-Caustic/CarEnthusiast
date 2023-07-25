@@ -10,6 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = builder.Configuration.GetSection("GoogleAuthSettings")
+    .GetValue<string>("ClientId");
+    googleOptions.ClientSecret = builder.Configuration.GetSection("GoogleAuthSettings")
+    .GetValue<string>("ClientSecret");
+});
 builder.Services.AddSession(options => options.IdleTimeout = TimeSpan.FromMinutes(30));
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<UserContext>(options =>
