@@ -1,16 +1,47 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using CarEnthusiast.Models;
 using Microsoft.AspNet.SignalR.Hubs;
+using Microsoft.AspNetCore.Identity;
+using CarEnthusiast.Data;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CarEnthusiast.Hubs
 {
-    [HubName("ChatHub")]
     public class ChatHub : Hub
     {
-       public async Task SendMessage(string user, string message)
+        private readonly UserContext _context;
+        private readonly UserManager<User> _userManager;
+
+        public ChatHub ( UserContext context, UserManager<User> userManager)
         {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
+            _context = context;
+            _userManager = userManager;
         }
+        [Authorize]
+        public async Task SendMessage(string message)
+        {
+            var user = await _userManager.GetUserAsync(Context.User);
+
+            if (user != null)
+            {
+                var newMessage = new Message
+                {
+                    UserName = user.UserName,
+                    Text = message,
+                    UserId = user.Id
+                };
+
+                _context.Messages.Add(newMessage);
+                await _context.SaveChangesAsync();
+
+                await Clients.All.SendAsync("ReceiveMessage", user.UserName, message);
+            }
+            //await Clients.All.SendAsync("ReceiveMessage", Context.User.Identity.Name ,message);
+        }
+
     }
 }
 

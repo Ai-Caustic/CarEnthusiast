@@ -42,6 +42,21 @@
 </header>
 
 <section class="h-100 gradient-form" style="background-color: #eee;">
+    <h3 class="text-center">Use another service to login.</h3>
+    <hr />
+    @{
+        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="">
+            <div class="text-center">
+                <p class="text-center">
+                    @foreach (var provider in Model.ExternalLogins!)
+                    {
+                        <button type="submit" class="btn btn-primary google" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account"><img src="~/Assets/google.svg" class="googleIco" />@provider.DisplayName</button>
+                    }
+                </p>
+            </div>
+        </form>
+
+    }
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-xl-10">
@@ -85,7 +100,7 @@
 
                                     <div class="d-flex align-items-center justify-content-center pb-4">
                                         <p class="mb-0 me-2">Don't have an account?</p>
-                                        <a class="btn btn-outline-Info" asp-area="Identity" asp-page="/Account/Register">Create new</a>
+                                        <a class="btn btn-outline-Primary" asp-area="Identity" asp-page="/Account/Register">Create new</a>
                                        
                                     </div>
 
@@ -109,38 +124,7 @@
     </div>
 
 </section>
-@*
-    <section>
-        <h3>Use another service to log in.</h3>
-        <hr />
-        @{
-            if ((Model.ExternalLogins?.Count ?? 0) == 0)
-            {
-                <div>
-                    <p>
-                        There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
-                            article
-                            about setting up this ASP.NET application to support logging in via external services
-                        </a>.
-                    </p>
-                </div>
-            }
-            else
-            {
-                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                    <div>
-                        <p>
-                            @foreach (var provider in Model.ExternalLogins!)
-                            {
-                                <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                            }
-                        </p>
-                    </div>
-                </form>
-            }
-        }
-    </section>
-*@
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

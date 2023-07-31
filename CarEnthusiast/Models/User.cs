@@ -11,6 +11,8 @@ namespace CarEnthusiast.Models
 
         public ICollection<Car> Cars { get; set; } = new List<Car>();
 
+        public ICollection<UserGroup> UserGroups { get; set; } = new List<UserGroup>();
+
         
         //public virtual ICollection<Message> Messages { get; set; }
 

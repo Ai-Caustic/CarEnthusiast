@@ -1,28 +1,33 @@
-﻿var connection = new signalR.HubConnectionBuilder().withUrl("/ChatHub").build();
+﻿"use strict";
 
-//Disable the send button until connection is established.
-//document.getElementById("sendButton").disabled = true;
+var connection = new signalR.HubConnectionBuilder().withUrl("/ChatHub").build();
+
+//Disable send button until connection is established  
+document.getElementById("sendBtn").disabled = true;
 
 connection.on("ReceiveMessage", function (user, message) {
-    var li = document.createElement("li");
-    document.getElementById("messagesList").appendChild(li);
-    // We can assign user-supplied strings to an element's textContent because it
-    // is not interpreted as markup. If you're assigning in any other way, you 
-    // should be aware of possible script injection concerns.
-    li.textContent = `${user} says ${message}`;
+    var userName = user.split("@")[0];
+    displayMessage(userName, message);
 });
 
 connection.start().then(function () {
-    document.getElementById("sendButton").disabled = false;
+    document.getElementById("sendBtn").disabled = false;
 }).catch(function (err) {
     return console.error(err.toString());
 });
 
-document.getElementById("sendButton").addEventListener("click", function (event) {
-    var user = document.getElementById("userInput").value;
-    var message = document.getElementById("messageInput").value;
-    connection.invoke("SendMessage", user, message).catch(function (err) {
+document.getElementById("sendBtn").addEventListener("click", function (event) {
+    var message = document.getElementById("txtmessage").value;
+    connection.invoke("SendMessage", message).catch(function (err) {
         return console.error(err.toString());
     });
     event.preventDefault();
-});
+});  
+
+function displayMessage(user, message) {
+    var msg = message.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">");
+    var encodedMsg = user + ": " + msg;
+    var li = document.createElement("li");
+    li.textContent = encodedMsg;
+    document.getElementById("ulmessages").appendChild(li);
+}

@@ -28,9 +28,6 @@ namespace CarEnthusiast.Controllers
         // GET: Cars
         public async Task<IActionResult> Index()
         {
-            //return _context.Cars != null ? 
-            //            View(await _context.Cars.ToListAsync()) :
-            //            Problem("Entity set 'UserContext.Cars'  is null.");
             var user = await _userManager.GetUserAsync(User);
             var userId = user?.Id;
 
@@ -39,9 +36,23 @@ namespace CarEnthusiast.Controllers
                 .Where(c => c.UserId == userId)
                 .ToList();
 
-            return View(userCars);
+            return userCars != null ? View(userCars) : Problem("Entity Set 'Cars' is null"); 
 
         }
+
+
+        // Get: Cars/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> List()
+        {
+            var cars = await _context.Cars.Include(c => c.CarImages).ToListAsync();
+            return View(cars);
+        }
+
 
         // GET: Cars/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -61,12 +72,7 @@ namespace CarEnthusiast.Controllers
             return View(car);
         }
 
-        // GET: Cars/Create
-
-        public IActionResult Create()
-        {
-            return View();
-        }
+        
 
         // POST: Cars/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -149,6 +155,7 @@ namespace CarEnthusiast.Controllers
             return View("Create");
         }
 
+        
         public IActionResult GetImage(int Id, int imageIndex = 0)
         {
             //var car = _context.Cars.FirstOrDefault(c => c.Id == Id);
@@ -176,16 +183,7 @@ namespace CarEnthusiast.Controllers
                 return File(car.Image, "image/jpg");
             }
 
-
-            //if (car != null && car.Image != null)
-            //{
-            //    return File(car.Image, "image/jpg"); // Adjust the MIME type according to your image format
-            //}
-            //else
-            //{
-            //    return null; //Handles the case when the image is not found
-            //}
-            var defaultImage = "~/Assets/Toy.jpg";
+            var defaultImage = System.IO.File.ReadAllBytes("~/Assets/Toy.jpg");
             return File(defaultImage, "image/jpg");
 
         }

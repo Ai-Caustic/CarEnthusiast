@@ -17,6 +17,6 @@ namespace CarEnthusiast.Models
         public User User { get; set; }
        
         public List<CarImage> CarImages { get; set; } = new List<CarImage>();
-        //public List<CarDetail> CarDetails { get; set; }
+       
     }
 }

@@ -1,20 +1,18 @@
-﻿@using Microsoft.AspNetCore.Identity
-@inject UserManager<User> userManager
-@model IEnumerable<CarEnthusiast.Models.Car>
+﻿@model IEnumerable<CarEnthusiast.Models.Car>
 
-
-@{
-    ViewData["Title"] = "Index";
+    @{
+    ViewData["Title"] = "List";
     Layout = null;
-    Layout = "";
-}
+    }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="~/css/Car.css" />
+    <h1 class="jumbotron text-centre">List</h1>
 
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
 
-
-<h1 class="jumbotron text-center">Car Collection</h1>
 <div class="container">
     <div class="row">
         @foreach (var item in Model)
@@ -62,49 +60,42 @@
                             <h2>No image available</h2>
                         </div>
                     }
-                    
-        <div class="card-body">
-            <div class="card-text">
-                <div class="row">
-                    <div class="col">
+
+                    <div class="card-body">
+                        <div class="card-text">
+                            <div class="row">
+                                <div class="col">
                                     <p class="card-text name"> @Html.DisplayNameFor(model => model.Model):</p>
-                    </div>   
-                    <div class="col">
+                                </div>
+                                <div class="col">
                                     <p class="card-text desc">@Html.DisplayFor(modelItem => item.Model)</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
                                     <p class="card-text name">@Html.DisplayNameFor(model => model.Year):</p>
-                    </div>
-                    <div class="col">
+                                </div>
+                                <div class="col">
                                     <p class="card-text desc">@Html.DisplayFor(modelItem => item.Year)</p>
-                    </div>
-                    </div>
-                <div class="row">
-                    <div class="col">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
                                     <p class="card-text name">@Html.DisplayNameFor(model => model.Showroom):</p>
-                    </div>
-                    <div class="col">
+                                </div>
+                                <div class="col">
                                     <p class="card-text desc">@Html.DisplayFor(modelItem => item.Showroom)</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    @*<div class="card-footer">
+                        <h5 class="text-center">Slimeto</h5>
+                    </div>*@
                 </div>
             </div>
-        </div>
-        <div class="card-footer">
-            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-        </div>
-    </div>
-    </div>
-    
-}       
-</div>
-    <div class="d-flex align-items-center justify-content-center pb-4">
-        <a class="btn btn-outline-Primary" asp-controller="Cars" asp-action="Create">Add new</a>
 
+        }
     </div>
 </div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>

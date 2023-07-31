@@ -1,63 +1,43 @@
 ﻿const imgInputHelper = document.getElementById("add-single-img");
 const imgInputHelperLabel = document.getElementById("add-img-label");
 const imgContainer = document.querySelector(".custom__image-container");
+const imgDisplayHelper = document.getElementById("display-single-img");
+const imgDisplayHelperLabel = document.getElementById("display-img-label");
+const displayContainer = document.querySelector(".display__image-container");
 const imgFiles = [];
 
 //imgInputHelper.style.display = "none";
 
-
 const addImgHandler = () => {
+  const file = imgInputHelper.files[0];
 
-    const file = imgInputHelper.files[0];
+  if (!file) return;
 
-    if (!file) return;
+  // Generate Image preview
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
 
-    // Generate Image preview 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
+  reader.onload = () => {
+    const newImg = document.createElement("img");
 
-    reader.onload = () => {
+    newImg.src = reader.result;
+    imgContainer.insertBefore(newImg, imgInputHelperLabel);
+  };
 
-        const newImg = document.createElement("img");
+  // Store img file
+  imgFiles.push(file);
 
-        newImg.src = reader.result;
-        imgContainer.insertBefore(newImg, imgInputHelperLabel);
-    };
+  //Reset image input
+  imgInputHelper.value = "";
 
-    // Store img file
-    imgFiles.push(file);
-
-    //Reset image input
-    imgInputHelper.value = "";
-
-    return;
+  return;
 };
 
 const getImgFileList = (imgFiles) => {
-    const imgFilesHelper = new DataTransfer();
-    imgFiles.forEach((imgFile) => imgFilesHelper.items.add(imgFile))
+  const imgFilesHelper = new DataTransfer();
+  imgFiles.forEach((imgFile) => imgFilesHelper.items.add(imgFile));
 
-    return imgFilesHelper.files;
+  return imgFilesHelper.files;
 };
 
-//const printFiles = (files, container) => {
-//    container.innerHTML = "";
-//    for (let i = 0; i < files.length; i++) {
-//        const p = document.CreateElement("p");
-//        p.textContent = `File: ${files[i].name}, size: ${files[i].size}`;
-//        constainer.appendChild(p);
-//    }
-//};
-
-//const customFormSubmitHandler = (ev) => {
-//    ev.preventDefault();
-//    const firstImgInput = document.getElementById("add-single-img");
-//    firstImgInput.files = getImgFileList(imgFiles);
-//    const container = document.getElementById("custom__print-files");
-//    printFiles(firstImgInput.files, container);
-//};
-
 imgInputHelper.addEventListener("change", addImgHandler);
-//document
-//    .querySelector(".custom__form")
-//    .addEventListener("submit", customFormSubmitHandler);

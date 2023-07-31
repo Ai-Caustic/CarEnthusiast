@@ -6,9 +6,74 @@
 
 <h1>Edit</h1>
 
-<h4>Car</h4>
+<h4>@Html.DisplayFor(m => m.Make)</h4>
 <hr />
-<div class="row">
+
+@using (Html.BeginForm("Edit", "Cars", FormMethod.Post, new { enctype = "multipart/form-data", @class = "custom_form"}))
+{
+    <div class="card-body">
+        <table class="table">
+            <tr>
+                <td>
+                    @Html.LabelFor(m => m.Make)
+                </td>
+                <td>
+                    @Html.TextBoxFor(m => m.Make, new { @class="form-control w-50"})
+                    @Html.ValidationMessageFor(m => m.Make, "", new { @class = "text-danger"})
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(m => m.Model)
+                </td>
+                <td>
+                    @Html.TextBoxFor(m => m.Model, new { @class = "form-control w-50" })
+                    @Html.ValidationMessageFor(m => m.Model, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(m => m.Year)
+                </td>
+                <td>
+                    @Html.TextBoxFor(m => m.Year, new { @class = "form-control w-50" })
+                    @Html.ValidationMessageFor(m => m.Year, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.Label("Image")
+                </td>
+                <td>
+                    <div class="display__image-container">
+                        <label id="display-img-label" for="display-single-img">+</label>
+                        <input type="file" name="CarImages" id="display-single-img" accept="image/*" multiple class="form-control w-50" />
+                    </div>
+                    @Html.ValidationMessageFor(m => m.CarImages, "", new { @class = "text-danger" })
+
+
+                </td>
+                <td>
+                    <div id="custom__print-files"></div>
+                </td>
+                </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(m => m.Showroom)
+                </td>
+                <td>
+                    @Html.TextBoxFor(m => m.Showroom, new { @class = "form-control w-50" })
+                    @Html.ValidationMessageFor(m => m.Showroom, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="card-footer">
+        <input id="car-submit" type="submit" value="Create" class="btn btn-primary" />
+    </div>
+}
+
+@*<div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -44,11 +109,12 @@
         </form>
     </div>
 </div>
-
+*@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
+<script src="~/js/image.js" defer></script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

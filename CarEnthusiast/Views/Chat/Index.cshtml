@@ -1,0 +1,19 @@
+﻿@model IEnumerable<CarEnthusiast.Models.Message>
+@{
+    Layout = null;
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <ul id="history">
+                @foreach (var message in Model)
+                {
+                    <li>@message.UserName: @message.Text </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+  

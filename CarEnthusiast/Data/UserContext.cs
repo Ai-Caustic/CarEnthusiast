@@ -14,18 +14,20 @@ namespace CarEnthusiast.Data
         public DbSet<Car> Cars { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<CarImage> CarImages { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<UserGroup> UserGroups { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<User>().ToTable("User");
-            modelBuilder.Entity<Message>().ToTable("Message");
-                //.HasOne(a => a.Sender)
-                //.WithMany(d => d.Messages)
-                //.HasForeignKey(a => a.UserId);
-            //modelBuilder.Entity<CarDetail>().ToTable("CarDetail");
-            modelBuilder.Entity<Car>().ToTable("Car");
-            modelBuilder.Entity<CarImage>().ToTable("CarImage");
-        }
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    base.OnModelCreating(modelBuilder);
+        //    modelBuilder.Entity<User>().ToTable("User");
+        //    modelBuilder.Entity<Message>().ToTable("Message");
+        //        //.HasOne(a => a.Sender)
+        //        //.WithMany(d => d.Messages)
+        //        //.HasForeignKey(a => a.UserId);
+        //    //modelBuilder.Entity<CarDetail>().ToTable("CarDetail");
+        //    modelBuilder.Entity<Car>().ToTable("Car");
+        //    modelBuilder.Entity<CarImage>().ToTable("CarImage");
+        //}
     }
 }

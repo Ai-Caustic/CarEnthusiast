@@ -24,6 +24,8 @@ builder.Services.AddDbContext<UserContext>(options =>
 builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
 
+builder.Services.AddControllers();
+
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<UserContext>();
