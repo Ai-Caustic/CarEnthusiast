@@ -2,32 +2,38 @@
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/ChatHub").build();
 
-//Disable send button until connection is established  
+//Disable send button until connection is established
 document.getElementById("sendBtn").disabled = true;
 
 connection.on("ReceiveMessage", function (user, message) {
-    var userName = user.split("@")[0];
-    displayMessage(userName, message);
+  var userName = user.split("@")[0];
+  //displayMessage(userName, message);
 });
 
-connection.start().then(function () {
+connection
+  .start()
+  .then(function () {
     document.getElementById("sendBtn").disabled = false;
-}).catch(function (err) {
+    console.log("Connection started");
+  })
+  .catch(function (err) {
     return console.error(err.toString());
+  });
+
+connection.onclose(function (err) {
+  console.error("Connection closed due to:", err.toString());
 });
 
 document.getElementById("sendBtn").addEventListener("click", function (event) {
+  if (connection.state == signalR.HubConnectionState.Connected) {
     var message = document.getElementById("txtmessage").value;
     connection.invoke("SendMessage", message).catch(function (err) {
-        return console.error(err.toString());
+      return console.error(err.toString());
     });
-    event.preventDefault();
-});  
+  } else {
+    console.error("Connection State: False");
+  }
+  event.preventDefault();
+});
 
-function displayMessage(user, message) {
-    var msg = message.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">");
-    var encodedMsg = user + ": " + msg;
-    var li = document.createElement("li");
-    li.textContent = encodedMsg;
-    document.getElementById("ulmessages").appendChild(li);
-}
+

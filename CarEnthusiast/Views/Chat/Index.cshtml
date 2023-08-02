@@ -1,19 +1,36 @@
-﻿@model IEnumerable<CarEnthusiast.Models.Message>
+﻿@model List<Message>
+@using System.Net.Mail
 @{
     Layout = null;
 }
 
-
-<div class="container">
-    <div class="row">
-        <div class="col-6">
-            <ul id="history">
-                @foreach (var message in Model)
-                {
-                    <li>@message.UserName: @message.Text </li>
-                }
-            </ul>
-        </div>
+<div class="row">
+    <div class="col-2">Message</div>
+    <div class="col-4"><input type="text" id="txtmessage" /></div>
+</div>
+<div class="row"> </div>
+<div class="row">
+    <div class="col-6">
+        <input type="button" id="sendBtn" value="Send" />
     </div>
-
-  
+</div>
+<div class="row">
+    <div class="col-12">
+        <hr />
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <ul id="ulmessages">
+            @foreach (var message in Model)
+            {
+                MailAddress email = new MailAddress(message.UserName);
+                var userName = email.User;
+                <li>@userName: @message.Text</li>
+            }
+        </ul>
+    </div>
+</div>
+<script src="/_framework/aspnetcore-browser-refresh.js"></script>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js" asp-append-version="true"></script>

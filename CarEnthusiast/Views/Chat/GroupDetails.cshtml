@@ -1,0 +1,48 @@
+﻿@model Group
+@using System.Net.Mail
+@{
+    Layout = null;
+}
+<h2>@Model.GroupName</h2>
+<ul id="groupMessages">
+@foreach (var message in Model.Messages)
+{
+        MailAddress email = new MailAddress(message.UserName);
+        var userName = email.User;
+        <li>@userName: @message.Text</li>
+}
+</ul>
+<input type="text" id="groupMessageInput" />
+<button id="groupSendButton" data-group-id="@Model.Id">Send</button>
+
+
+    <script src="/_framework/aspnetcore-browser-refresh.js"></script>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script>
+        var connection = new signalR.HubConnectionBuilder().withUrl("/ChatHub").build();
+
+        document.getElementById("groupSendButton").addEventListener("click", function (event) {
+            var message = document.getElementById("groupMessageInput").value;
+            var groupId = @Model.Id;
+            connection.invoke("SendGroupMessage", groupId, message).then(function () {
+            // After the message is sent successfully, reload the page to show the latest messages
+            location.reload();
+            }).catch(function (err) {
+                return console.error(err.toString());
+            });
+            event.preventDefault();
+        });
+
+        connection.on("ReceiveMessage", function (user, message) {
+            var encodedMessage = user + ": " + message;
+            var li = document.createElement("li");
+            li.textContent = encodedMessage;
+            document.getElementById("groupMessages").appendChild(li);
+        });
+
+        connection.start().catch(function (err) {
+            return console.error(err.toString());
+        });
+    </script>
+
+

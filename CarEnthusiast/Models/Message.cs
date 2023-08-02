@@ -16,6 +16,8 @@ namespace CarEnthusiast.Models
 
         public virtual User Sender { get; set; }
 
-        public int GroupId { get; set; }
+        // Navigation
+        public int? GroupId { get; set; }
+        public virtual Group Group { get; set; }
     }
 }
