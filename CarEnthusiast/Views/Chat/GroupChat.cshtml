@@ -17,7 +17,7 @@
             <P id="identifier">@group.GroupName</P>
                 <input type="hidden" name="groupId" value="@group.Id" id="idGroup"/>
                 <button type="button" class="joinButton">Join</button>
-            <a asp-action="GroupDetails" asp-controller="Chat" asp-route-groupId="@group.Id">View Messages</a>
+            <a asp-action="GroupDetails" asp-controller="Chat" asp-route-groupId="@group.Id" asp-route-groupName="@group.GroupName">View Messages</a>
         </li>
     }
 </ul>
@@ -57,7 +57,7 @@
         // Handle the AlreadyJoinedGroup event
         connection.on("AlreadyJoinedGroup", function (groupId) {
             var groupName = document.getElementById("groupName").value;
-            window.alert(`You are already in group ${groupName}`);
+            window.alert(`You are already in ${groupName}`);
         });
 
         connection.start().then(function() {

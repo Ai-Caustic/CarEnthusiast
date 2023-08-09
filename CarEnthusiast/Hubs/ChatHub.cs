@@ -29,6 +29,7 @@ namespace CarEnthusiast.Hubs
             {
                 var newMessage = new Message
                 {
+
                     UserName = user.UserName,
                     Text = message,
                     UserId = user.Id
@@ -98,7 +99,6 @@ namespace CarEnthusiast.Hubs
                 _context.Messages.Add(newMessage);
                 await _context.SaveChangesAsync();
 
-                //await Clients.All.SendAsync("ReceiveMessage", user.UserName, message);
                 await Clients.Groups(groupId.ToString()).SendAsync("ReceiveMessage", user.UserName, message);
             }
         }
@@ -109,7 +109,7 @@ namespace CarEnthusiast.Hubs
 
             if (user == null || string.IsNullOrWhiteSpace(groupName))
             {
-                // Handle invalid input or user not found
+                // Handle invalid input or user not found //TODO
                 return;
             }
 

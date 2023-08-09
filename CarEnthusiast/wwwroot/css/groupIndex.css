@@ -1,0 +1,45 @@
+﻿body {
+    background: linear-gradient(to left, black, aqua);
+}
+.gradient-custom {
+  /* fallback for old browsers */
+  background: #fccb90;
+
+  /* Chrome 10-25, Safari 5.1-6
+    background: -webkit-linear-gradient(to bottom right, red, black); */
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to left, black, aqua);
+}
+
+.mask-custom {
+  background: rgba(24, 24, 16, 0.2);
+  border-radius: 2em;
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(255, 255, 255, 0.05);
+  background-clip: padding-box;
+  box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
+}
+
+.pt-1 :nth-child(1) {
+  color: black;
+  font-weight: bold;
+  font-size: large;
+}
+
+.custom-card {
+  border: 1px solid #ccc;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.custom-card .card-header {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.custom-card .card-body {
+  font-size: 16px;
+  line-height: 1.6;
+}

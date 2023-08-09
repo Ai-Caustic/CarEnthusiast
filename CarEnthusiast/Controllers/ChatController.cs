@@ -15,21 +15,54 @@ namespace CarEnthusiast.Controllers
     {
 
         private readonly UserContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public ChatController (UserContext context)
+        public ChatController (UserContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var messages = _context.Messages.ToList();
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                var userId = user.Id;
+                var userMessages = _context.Messages.Where(m => m.UserId == userId && m.GroupId == null)
+                                                    .OrderBy(m => m.dateTime)
+                                                    .ToList();
+                var otherUserMessages = _context.Messages.Where(m => m.UserId != userId && m.GroupId == null)
+                                                         .OrderBy(m => m.dateTime)
+                                                         .ToList();
 
-            return View(messages);
+                if (userMessages.Count == 0)
+                {
+                    var mtViewModel = new MessageViewModel
+                    {
+                        UserMessages = new List<Message>(),
+                        OtherMessages = otherUserMessages
+                    };
+
+                    return View(mtViewModel);
+                }
+
+                var viewModel = new MessageViewModel
+                {
+                    UserMessages = userMessages,
+                    OtherMessages = otherUserMessages
+                };
+                  return View(viewModel);              
+            }
+            else
+            {
+                //Handle Message View if user is not logged in TODO:
+                var messages = _context.Messages.Where(m => m.GroupId == null).ToList();
+
+
+                return View(messages);
+            }
+            
         }
 
         public IActionResult GroupChat()
@@ -38,17 +71,44 @@ namespace CarEnthusiast.Controllers
             return View(groups);
         }
 
-        public IActionResult GroupDetails(int groupId)
+        public async Task<IActionResult> GroupDetails(int groupId, string groupName)
         {
-            var group = _context.Groups
-                        .Include(g => g.Messages)
-                        .FirstOrDefault(g => g.Id == groupId);
-            
-            if (group == null)
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
             {
-                return NotFound();
+                var userId = user.Id;
+                var userMessages = _context.Messages
+                                   .Where(m => m.UserId == userId && m.GroupId == null)
+                                   .OrderBy(m => m.dateTime)
+                                   .ToList();
+                var userGroupMessages = _context.Messages
+                                    .Where(m => m.UserId == userId && m.GroupId == groupId)
+                                    .OrderBy(m => m.dateTime)
+                                    .ToList();
+                var otherUserGroupMessages = _context.Messages
+                                    .Where(m => m.UserId != userId && m.GroupId == groupId)
+                                    .OrderBy(m => m.dateTime)
+                                    .ToList();
+
+                var viewModel = new MessageViewModel
+                {
+                    UserMessages = userGroupMessages,
+                    OtherMessages = otherUserGroupMessages,
+                    GroupId = groupId,
+                    GroupName = groupName
+                };
+                return View(viewModel);
             }
-            return View(group);
+            return View("GroupChat");
+            //var group = _context.Groups
+            //            .Include(g => g.Messages)
+            //            .FirstOrDefault(g => g.Id == groupId);
+            
+            //if (group == null)
+            //{
+            //    return NotFound();
+            //}
+            //return View(group);
         }
     }
 }

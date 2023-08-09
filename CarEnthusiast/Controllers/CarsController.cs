@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CarEnthusiast.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class CarsController : Controller
     {
         private readonly UserContext _context;
@@ -25,61 +25,15 @@ namespace CarEnthusiast.Controllers
             _userManager = userManager;
         }
 
-        // GET: Cars
-        public async Task<IActionResult> Index()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            var userId = user?.Id;
 
-            var userCars = _context.Cars
-                .Include(c => c.CarImages) // Include the CarImages navigation property
-                .Where(c => c.UserId == userId)
-                .ToList();
-
-            return userCars != null ? View(userCars) : Problem("Entity Set 'Cars' is null"); 
-
-        }
-
-
-        // Get: Cars/Create
-        public IActionResult Create()
+        public IActionResult Add()
         {
             return View();
         }
 
-        public async Task<IActionResult> List()
-        {
-            var cars = await _context.Cars.Include(c => c.CarImages).ToListAsync();
-            return View(cars);
-        }
-
-
-        // GET: Cars/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Cars == null)
-            {
-                return NotFound();
-            }
-
-            var car = await _context.Cars
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (car == null)
-            {
-                return NotFound();
-            }
-
-            return View(car);
-        }
-
-        
-
-        // POST: Cars/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CarViewModel carViewModel)
+        public async Task<IActionResult> Add(CarViewModel carViewModel)
         {
 
             if (ModelState.IsValid)
@@ -149,13 +103,63 @@ namespace CarEnthusiast.Controllers
 
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                return View("Land");
             }
 
-            return View("Create");
+            return View("Add");
         }
 
-        
+        public IActionResult Land()
+        {
+            return View();
+        }
+
+        // GET: Cars
+        public async Task<IActionResult> Index()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var userId = user?.Id;
+
+            var userCars = _context.Cars
+                .Include(c => c.CarImages) // Include the CarImages navigation property
+                .Where(c => c.UserId == userId)
+                .ToList();
+
+            return userCars != null ? View(userCars) : Problem("Entity Set 'Cars' is null"); 
+
+        }
+
+
+        public async Task<IActionResult> List()
+        {
+            var cars = await _context.Cars.Include(c => c.CarImages).ToListAsync();
+            return View(cars);
+        }
+
+        public IActionResult Tester()
+        {
+            return View();
+        }
+
+        // GET: Cars/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null || _context.Cars == null)
+            {
+                return NotFound();
+            }
+
+            var car = await _context.Cars
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (car == null)
+            {
+                return NotFound();
+            }
+
+            return View(car);
+        }
+
+
         public IActionResult GetImage(int Id, int imageIndex = 0)
         {
             //var car = _context.Cars.FirstOrDefault(c => c.Id == Id);
@@ -204,7 +208,7 @@ namespace CarEnthusiast.Controllers
             return View(car);
         }
 
-        // POST: Cars/Edit/5
+        // POST: Cars/Edit
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -239,7 +243,7 @@ namespace CarEnthusiast.Controllers
             return View(car);
         }
 
-        // GET: Cars/Delete/5
+        // GET: Cars/Delete
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Cars == null)
@@ -257,7 +261,7 @@ namespace CarEnthusiast.Controllers
             return View(car);
         }
 
-        // POST: Cars/Delete/5
+        // POST: Cars/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

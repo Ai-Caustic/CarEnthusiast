@@ -1,43 +1,32 @@
-﻿const imgInputHelper = document.getElementById("add-single-img");
-const imgInputHelperLabel = document.getElementById("add-img-label");
-const imgContainer = document.querySelector(".custom__image-container");
-const imgDisplayHelper = document.getElementById("display-single-img");
-const imgDisplayHelperLabel = document.getElementById("display-img-label");
-const displayContainer = document.querySelector(".display__image-container");
-const imgFiles = [];
+﻿const input = document.getElementById("add-img");
+const output = document.getElementById("add-img-label");
+let images = [];
 
-//imgInputHelper.style.display = "none";
+input.addEventListener("change", function (event) {
+    
+    const imageFiles = event.target.files;
 
-const addImgHandler = () => {
-  const file = imgInputHelper.files[0];
+    totalImages = imageFiles.length;
 
-  if (!file) return;
+    output.innerHTML = "";
+    if (totalImages > 0) {
+           for (const imageFile of imageFiles) {
+        const reader = new FileReader();
 
-  // Generate Image preview
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
+        //Convert each image to a string
+        reader.readAsDataURL(imageFile);
 
-  reader.onload = () => {
-    const newImg = document.createElement("img");
-
-    newImg.src = reader.result;
-    imgContainer.insertBefore(newImg, imgInputHelperLabel);
-  };
-
-  // Store img file
-  imgFiles.push(file);
-
-  //Reset image input
-  imgInputHelper.value = "";
-
-  return;
-};
-
-const getImgFileList = (imgFiles) => {
-  const imgFilesHelper = new DataTransfer();
-  imgFiles.forEach((imgFile) => imgFilesHelper.items.add(imgFile));
-
-  return imgFilesHelper.files;
-};
-
-imgInputHelper.addEventListener("change", addImgHandler);
+        // FileReader will emit the load event when the data URL is ready
+        // Access the string using reader.result inside the callback function
+        reader.addEventListener("load", () => {
+            var img = document.createElement("img");
+            img.setAttribute('class', "img-thumbnail");
+            img.src = reader.result;
+            input.parentNode.insertBefore(img, input);
+        });
+    }
+    }
+    else {
+        output.innerHTML = "";
+    }
+});

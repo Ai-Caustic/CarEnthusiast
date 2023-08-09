@@ -13,6 +13,8 @@ namespace CarEnthusiast.Models
 
         public ICollection<UserGroup> UserGroups { get; set; } = new List<UserGroup>();
 
+        public ICollection<Message> Messages { get; set; } = new List<Message>();
+
         
         //public virtual ICollection<Message> Messages { get; set; }
 

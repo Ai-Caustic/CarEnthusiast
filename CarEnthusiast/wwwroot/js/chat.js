@@ -26,14 +26,17 @@ connection.onclose(function (err) {
 
 document.getElementById("sendBtn").addEventListener("click", function (event) {
   if (connection.state == signalR.HubConnectionState.Connected) {
-    var message = document.getElementById("txtmessage").value;
-    connection.invoke("SendMessage", message).catch(function (err) {
-      return console.error(err.toString());
-    });
+    var message = document.getElementById("txtMessage").value;
+    connection
+      .invoke("SendMessage", message)
+      .then(function () {
+        location.reload();
+      })
+      .catch(function (err) {
+        return console.error(err.toString());
+      });
   } else {
     console.error("Connection State: False");
   }
   event.preventDefault();
 });
-
-
