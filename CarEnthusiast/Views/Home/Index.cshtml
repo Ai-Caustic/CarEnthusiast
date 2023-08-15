@@ -1,48 +1,90 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Net.Mail
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@{
     Layout = null;
     Layout = "";
 }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="~/css/lp.css" />
+<link rel="stylesheet" href="~/css/site.css" />
+<link rel="stylesheet" href="~/font-awesome-4.5.0/css/font-awesome.css">
 
 
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Car Enthusiast</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Cars" asp-action="Index">Cars</a>
-                    </li>
-                    <li>
-                        <a class="nav-link text-dark" asp-controller="Chat" asp-action="Index">Chat</a>
-                    </li>
-                </ul>
-                @await Html.PartialAsync("_LoginPartial")
-            </div>
-        </div>
-    </nav>
-</header>
-<div class="content">
-    <div class="row justify-content-center index">
-        <div class="col-6 justify-content-center">
-            <a class="index-button" asp-area="Identity" asp-page="/Account/Login">Login</a>
-            <a class="index-button" asp-area="Identity" asp-page="/Account/Register">Register</a>
-        </div>
-    </div>
+<div class="allcontain">
+	<div class="header">
+		<ul class="socialicon">
+			<li><a asp-controller="Home" asp-action="Index"><i class="fa fa-home"></i></a></li>
+			<li><a asp-controller="Cars" asp-action="Land"><i class="fa fa-car"></i></a></li>
+			<li><a asp-controller="Chat" asp-action="Chat"><i class="fa fa-comments-o"></i></a></li>
+			<li><a asp-controller ="Home" asp-action="Privacy"><i class="fa fa-user-secret"></i></a></li>
+		</ul>
+		<ul class="givusacall">
+			<li>Give us a call : +666 </li>
+		</ul>
+		<ul class="logreg">
+			@if (SignInManager.IsSignedIn(User))
+			{
+				MailAddress email = new MailAddress(UserManager.GetUserName(User));
+				var username = email.User;
+				<li>
+					<p id="greetings">Hello @username</p>
+				</li>
+				<li>
+					<form id="logoutForm" class="" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = ""})">
+						<button id="logout" type="submit" class="">Logout</button>
+					</form>
+				</li>
+
+			}
+			else
+			{
+				<li>
+					<a class="" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+				</li>
+				<li>
+					<a class="" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+				</li>
+			}
+		</ul>
+	</div>
+	<!-- Navbar Up -->
+	<nav class="topnavbar navbar-default topnav">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand logo" href="#"><img src="~/Assets/images/logo1.png" alt="logo"></a>
+			</div>
+		</div>
+	</nav>
 </div>
+
+@if (SignInManager.IsSignedIn(User))
+{
+	<div class="content">
+		<div class="row justify-content-center index">
+			<div class="col-6 justify-content-center">
+				<a class="index-button" asp-controller="Cars" asp-action="Land">Cars</a>
+				<a class="index-button" asp-controller="Chat" asp-action="Chat">Chat</a>
+			</div>
+		</div>
+	</div>
+}
+else
+{
+	<div class="content">
+		<div class="row justify-content-center index">
+			<div class="col-6 justify-content-center">
+				<a class="index-button" asp-area="Identity" asp-page="/Account/Login">Login</a>
+				<a class="index-button" asp-area="Identity" asp-page="/Account/Register">Register</a>
+			</div>
+		</div>
+	</div>
+}
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.lordicon.com/bhenfmcm.js"></script>

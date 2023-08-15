@@ -56,3 +56,48 @@ body {
         border-radius: 5px;
         object-fit: cover;
     }
+
+.sidebar {
+    width: 30%;
+    padding: 10px;
+    background-color: #fff;
+    border-right: var(--border);
+    overflow-y: scroll;
+    height: calc(100vh - 20px);
+}
+
+.group-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.group-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.group-name {
+    flex-grow: 1;
+    font-weight: bold;
+    margin-right: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.group-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-right: 5px;
+    background-color: #579ffb;
+    color: #fff;
+}
+
+    .group-btn:last-child {
+        background-color: #27ae60;
+    }

@@ -3,6 +3,7 @@
     Layout = null;
 }
 
+<link rel="stylesheet" href="~/css/site.css" />
 <h2>Group Chat</h2>
 <h4>Create Group</h4>
 <form id="createGroupForm">
@@ -10,17 +11,24 @@
     <input type="text" name="groupName" id="groupName" required/>
     <button type="submit">Create Group</button>
 </form>
-<ul>
     @foreach(var group in Model)
     {
-        <li>
+        <aside class="sidebar">
+            <div class="group-list">
+                <div class="group-item">
+                    <div class="group-name">@group.GroupName</div>
+                    <button class="group-btn">Join</button>
+                    <button class="group-btn">View</button>
+                </div>
+            </div>
+        </aside>
+        @*<li>
             <P id="identifier">@group.GroupName</P>
                 <input type="hidden" name="groupId" value="@group.Id" id="idGroup"/>
                 <button type="button" class="joinButton">Join</button>
             <a asp-action="GroupDetails" asp-controller="Chat" asp-route-groupId="@group.Id" asp-route-groupName="@group.GroupName">View Messages</a>
-        </li>
+        </li>*@
     }
-</ul>
 <script src="/_framework/aspnetcore-browser-refresh.js"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script>

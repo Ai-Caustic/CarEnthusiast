@@ -5,6 +5,7 @@ using Owin;
 using CarEnthusiast.Data;
 using CarEnthusiast.Models;
 using CarEnthusiast.Hubs;
+using System.Reactive.Joins;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,9 +94,23 @@ app.MapHub<ChatHub>("ChatHub");
 
 //app.MapAreaControllerRoute
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    endpoints.MapControllerRoute(
+        name: "groupChat",
+        pattern: "{controller=Chat}/{action=Chat}/{groupId?}",
+        defaults: new { controller = "Chat", action = "Chat" });
+
+    // ... other routes ...
+});
+
+
+
+
 
 app.MapRazorPages();
 

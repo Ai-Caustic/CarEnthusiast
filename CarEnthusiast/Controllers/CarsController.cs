@@ -109,9 +109,18 @@ namespace CarEnthusiast.Controllers
             return View("Add");
         }
 
-        public IActionResult Land()
+        public async Task<IActionResult> Land()
         {
-            return View();
+            var user = await _userManager.GetUserAsync(User);
+            var userId = user?.Id;
+
+            var userCars = _context.Cars
+                .Include(c => c.CarImages) // Include the CarImages navigation property
+                .Where(c => c.UserId == userId)
+                .ToList();
+
+            return userCars != null ? View(userCars) : Problem("Entity Set 'Cars' is null"); 
+           // return View();
         }
 
         // GET: Cars

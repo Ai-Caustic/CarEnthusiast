@@ -21,10 +21,10 @@
 	<div class="allcontain">
 		<div class="header">
 			<ul class="socialicon">
-				<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-				<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-				<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-				<li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+				<li><a asp-controller="Home" asp-action="Index"><i class="fa fa-home"></i></a></li>
+				<li><a asp-controller="Cars" asp-action="Land"><i class="fa fa-car"></i></a></li>
+				<li><a asp-controller="Chat" asp-action="Chat"><i class="fa fa-comments-o"></i></a></li>
+				<li><a asp-controller="Home" asp-action="Privacy"><i class="fa fa-user-secret"></i></a></li>
 			</ul>
 			<ul class="givusacall">
 				<li>Give us a call : +666 </li>
@@ -38,43 +38,8 @@
 		<nav class="topnavbar navbar-default topnav">
 			<div class="container">
 				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed toggle-costume" data-toggle="collapse"
-							data-target="#upmenu" aria-expanded="false">
-						<span class="sr-only"> Toggle navigaion</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
 					<a class="navbar-brand logo" href="#"><img src="~/Assets/images/logo1.png" alt="logo"></a>
 				</div>
-			</div>
-			<div class="collapse navbar-collapse" id="upmenu">
-				<ul class="nav navbar-nav" id="navbarontop">
-					<li class="active"><a href="index.html">HOME</a> </li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-						   aria-expanded="false">CATEGORIES <span class="caret"></span></a>
-						<ul class="dropdown-menu dropdowncostume">
-							<li><a href="#">Sport</a></li>
-							<li><a href="#">Old</a></li>
-							<li><a href="#">New</a></li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-						   aria-expanded="false">DEALERS <span class="caret"></span></a>
-						<ul class="dropdown-menu dropdowncostume">
-							<li><a href="#">1</a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="3">3</a></li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-						   aria-expanded="false">CONTACT </a>
-					</li>
-					<button><span class="postnewcar">POST NEW CAR</span></button>
-				</ul>
 			</div>
 		</nav>
 	</div>
@@ -86,7 +51,6 @@
                         <h1 class="text-center">New Car entry</h1>
                     </div>
                 <div class="form-group group-coustume">
-                 @*   <form action="/Cars/Add" method="post" enctype="multipart/form-data" id="my-form" class="custom__form">*@
 							@using (Html.BeginForm("Add", "Cars", FormMethod.Post, new { enctype = "multipart/form-data", @class = "custom__form", id = "my-form"}))
 							{
                             <div class="card-body">
@@ -113,10 +77,8 @@
 								<input id="car-submit" type="submit" value="Create" class="btn btn-primary" />
                             </div>
 							}
-                    
                 </div>
                 </div>
-
             </div>
         </div>
 	</div>

@@ -1,4 +1,4 @@
-﻿.allcontain {
+.allcontain {
     max-width: 1366px;
     margin-left: auto;
     margin-right: auto;
@@ -1200,6 +1200,8 @@
         border: 0px;
     }
 
+
+
 @media screen and (min-width: 1366px) {
     .latest-navleft {
         width: 810px;
@@ -1277,7 +1279,6 @@
     position: absolute;
     top: 0px;
     left: 0px;
-    background: rgba(12, 12, 12, 0.7);
     width: 100%;
     height: 100%;
     opacity: 0;
@@ -1318,7 +1319,7 @@
     .simpletxt > p {
         font-family: "OpenSans Regular";
         font-size: 11.2px;
-        color: #e7e7e7;
+        color: black;
         padding-top: 7px;
     }
 
@@ -1369,7 +1370,11 @@
 }
 
 .txthover > img {
-    width: 100%;
+    width: 320px;
+    height: 370px;
+    object-fit: cover;
+    margin: 20px;
+
 }
 
 .txthover:hover .txtcontent {
