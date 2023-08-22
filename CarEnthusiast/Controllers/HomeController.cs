@@ -36,6 +36,11 @@ namespace CarEnthusiast.Controllers
             return View();
         }
 
+        public IActionResult Land()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> Logout(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();

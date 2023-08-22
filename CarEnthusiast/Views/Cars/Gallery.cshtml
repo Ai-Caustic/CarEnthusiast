@@ -1,0 +1,134 @@
+﻿
+@{
+    Layout = null;
+}
+@model IEnumerable<Car>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/fontawesome-4.5.0/css/fontawesome.min.css">
+    <link rel="stylesheet" href="~/css/emo-style.css">
+
+</head>
+<body>
+    <!-- Page Loader -->
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+
+    </div>
+
+    <div id="header" class="container">
+        <div id="logo">
+            <h1><a href="#">ENTHU <span>SIAST</span></a></h1>
+        </div>
+        <div id="menu">
+            <ul>
+                <li class="current_page_item"><a href="#">Homepage</a></li>
+                <li><a href="#">Chat</a></li>
+                <li><a href="#">Groups</a></li>
+                <li><a href="#">Post Car</a></li>
+                <li><a href="#">Privacy</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container-fluid tm-container-content tm-mt-60">
+        <div class="row mb-4">
+            <h2 class="col-6 tm-text-primary">
+                Latest Photos
+            </h2>
+            <div class="col-6 d-flex justify-content-end align-items-center">
+                <form action="" class="tm-text-primary">
+                    Page <input type="text" value="@ViewBag.CurrentPage" size="1" class="tm-input-paging tm-text-primary"> of @ViewBag.TotalPages
+                </form>
+            </div>
+
+        </div>
+        <div class="row tm-mb-90 tm-gallery">
+            @if (Model != null)
+            {
+                @foreach (var item in Model)
+                {
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+                        <figure class="effect-ming tm-video-item">
+                            @if (item.CarImages != null && item.CarImages.Count > 0)
+                            {
+                                <div id="carousel-@item.Id" class="carousel slide" data-bs-ride="carousel">
+                                    <div class="carousel-inner">
+                                        @for (int k = 0; k < item.CarImages.Count; k++)
+                                        {
+                                            var imageData = item.CarImages[k].ImageData;
+                                            var imageBase64 = Convert.ToBase64String(imageData);
+                                            var imageUrl = $"data:image/jpg;base64,{imageBase64}";
+
+                                            <div class="carousel-item @(k == 0 ? "active" : "")">
+                                                <img src="@imageUrl" alt="Car Image" class="img-fluid custom-image-size">
+                                            </div>
+                                        }
+                                    </div>
+                                    <a class="carousel-control-prev" href="#carousel-@item.Id" role="button" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#carousel-@item.Id" role="button" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <p>No image available</p>
+                            }
+                            <figcaption class="d-flex align-items-center justify-content-center">
+                                <h2>@Html.DisplayFor(modelItem => item.Make)</h2>
+                                <a href="photo-detail.html">View more</a>
+                            </figcaption>
+                        </figure>
+                        <div class="d-flex justify-content-between tm-text-gray">
+                            <span class="tm-text-gray-light">18 Oct 2020</span>
+                            <span>9,906 views</span>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No cars available in the model.</p>
+            }
+        </div> <!-- row -->
+        <div class="row tm-mb-90">
+            <div class="col-12 d-flex justify-content-between align-items-center tm-paging-col">
+                @if (ViewBag.CurrentPage > 1)
+                {
+                    <a href="/Gallery?page=@(ViewBag.CurrentPage - 1)" class="btn btn-primary tm-btn-prev mb-2">Previous</a>
+                }
+                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                {
+                    <a href="/Gallery?page=@(ViewBag.CurrentPage + 1)" class="btn btn-primary tm-btn-next">Next Page</a>
+                }
+            </div>
+        </div>
+    </div> <!-- container-fluid, tm-container-content -->
+
+    <div class="text-center">
+    <a class="btn btn-primary " asp-controller="Cars" asp-action="Add">Add New Entry</a>
+    </div>
+    <script src="~/js/plugins.js"></script>
+    <script>
+        $(window).on("load", function () {
+            $('body').addClass('loaded');
+        });
+    </script>
+</body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>

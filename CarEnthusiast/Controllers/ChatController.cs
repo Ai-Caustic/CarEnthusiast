@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using CarEnthusiast.Hubs;
-// using CarEnthusiast.Migrations
 using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute;
 
 namespace CarEnthusiast.Controllers
@@ -45,6 +44,8 @@ namespace CarEnthusiast.Controllers
 
             Group selectedGroup = null;
 
+            List<Message> globalChatMessages = null;
+
             if (groupId.HasValue)
             {
                 selectedGroup = userGroups.FirstOrDefault(group => group.Id == groupId);
@@ -58,13 +59,22 @@ namespace CarEnthusiast.Controllers
                 // Load messages associated with the selected group
                 _context.Entry(selectedGroup).Collection(g => g.Messages).Load();
             }
+            else
+            {
+                globalChatMessages = _context.Messages
+                                     .Where(m => m.GroupId == null)
+                                     .OrderByDescending(m => m.dateTime)
+                                     .ToList();
+            }
 
 
             var viewModel = new GroupChatViewModel
             {
                 UserGroups = userGroups,
                 SelectedGroup = selectedGroup,
-                Messages = selectedGroup?.Messages?.OrderByDescending(msg => msg.dateTime).ToList()
+                Messages = groupId.HasValue
+                           ? selectedGroup?.Messages?.OrderByDescending(msg => msg.dateTime).ToList()
+                           : globalChatMessages
             };
 
             return View(viewModel);
@@ -113,41 +123,10 @@ namespace CarEnthusiast.Controllers
             
         }
 
-        public IActionResult GroupChat()
+        public IActionResult Groups()
         {
             var groups = _context.Groups.Include(g => g.Messages).ToList();
             return View(groups);
-        }
-
-        public async Task<IActionResult> GroupDetails(int groupId, string groupName)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user != null)
-            {
-                var userId = user.Id;
-                var userMessages = _context.Messages
-                                   .Where(m => m.UserId == userId && m.GroupId == null)
-                                   .OrderBy(m => m.dateTime)
-                                   .ToList();
-                var userGroupMessages = _context.Messages
-                                    .Where(m => m.UserId == userId && m.GroupId == groupId)
-                                    .OrderBy(m => m.dateTime)
-                                    .ToList();
-                var otherUserGroupMessages = _context.Messages
-                                    .Where(m => m.UserId != userId && m.GroupId == groupId)
-                                    .OrderBy(m => m.dateTime)
-                                    .ToList();
-
-                var viewModel = new MessageViewModel
-                {
-                    UserMessages = userGroupMessages,
-                    OtherMessages = otherUserGroupMessages,
-                    GroupId = groupId,
-                    GroupName = groupName
-                };
-                return View(viewModel);
-            }
-            return View("GroupChat");
         }
     }
 }

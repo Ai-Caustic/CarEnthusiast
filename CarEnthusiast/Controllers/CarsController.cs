@@ -10,6 +10,7 @@ using CarEnthusiast.Data;
 using CarEnthusiast.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Azure;
 
 namespace CarEnthusiast.Controllers
 {
@@ -29,6 +30,54 @@ namespace CarEnthusiast.Controllers
         public IActionResult Add()
         {
             return View();
+        }
+
+        public IActionResult Test()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> Gallery(int page , int pageSize = 16)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var userId = user?.Id;
+
+            var userCars = _context.Cars
+                .Include(c => c.CarImages) // Include the CarImages navigation property
+                .Where(c => c.UserId == userId)
+                .ToList();
+
+            // Calculate the total number of pages
+            var totalItems = userCars.Count();
+            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            // Validate the page number to ensure it's within bounds
+            if (page < 1)
+            {
+                page = 1;
+            }
+            else if (page > totalPages)
+            {
+                page = totalPages;
+            }
+
+            // Retrieve the cars for the current page
+            var currentPageCars = userCars
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
+            return View(currentPageCars);
+        }
+
+
+
+        public IActionResult Contacts()
+        {
+            return View(); 
         }
 
         [HttpPost]
@@ -82,28 +131,33 @@ namespace CarEnthusiast.Controllers
                     var uploadedImage = carViewModel.UploadedImages?.FirstOrDefault();
 
                     if (uploadedImage != null && uploadedImage.Length > 0)
-                    {
-                        using var memoryStream = new MemoryStream();
-                        await uploadedImage.CopyToAsync(memoryStream);
 
-                        var car = new Car
                         {
-                            Make = carViewModel.Make,
-                            Model = carViewModel.Model,
-                            Year = carViewModel.Year,
-                            Showroom = carViewModel.Showroom,
-                            UserId = user.Id,
-                            Image = memoryStream.ToArray()
-                        };
+                            using var memoryStream = new MemoryStream();
+                            await uploadedImage.CopyToAsync(memoryStream);
 
-                        _context.Cars.Add(car);
-                    }
+                            var car = new Car
+                            {
+                                Make = carViewModel.Make,
+                                Model = carViewModel.Model,
+                                Year = carViewModel.Year,
+                                Showroom = carViewModel.Showroom,
+                                UserId = user.Id,
+                            };
 
+                            var carImage = new CarImage
+                            {
+                                ImageData = memoryStream.ToArray(),
+                                FileName = uploadedImage.FileName
+                            };
+
+                            car.CarImages.Add(carImage);
+                            _context.Cars.Add(car);
+                        }
                 }
-
                 await _context.SaveChangesAsync();
 
-                return View("Land");
+                return View("Test");
             }
 
             return View("Add");

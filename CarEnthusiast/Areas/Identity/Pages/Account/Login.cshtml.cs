@@ -105,7 +105,7 @@ namespace CarEnthusiast.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/Cars/Land");
+            returnUrl ??= Url.Content("~/Cars/Test");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 

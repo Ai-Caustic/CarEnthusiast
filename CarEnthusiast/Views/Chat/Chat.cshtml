@@ -10,20 +10,29 @@
 <link rel="stylesheet" href="~/css/chat.css" />
 <link rel="stylesheet" href="~/font-awesome-4.5.0/css/font-awesome.css">
 
-
-
 <aside class="sidebar">
-    <ul class="group-list">
-        @foreach (var group in Model.UserGroups)
-        {
-            <li class="list-group-item @(Model.SelectedGroup == group ? "active" : "")">
-                <a asp-controller="Chat" asp-action="Chat" asp-route-groupId="@group.Id">@group.GroupName</a>
-            </li>  
-        }
-    </ul>
+    <div class="card text-center">
+        <div class="card-header text-center">
+            <h2>Your Groups</h2>
+        </div>
+        <div class="card-body">
+                <ul class="">
+                @foreach (var group in Model.UserGroups)
+                {
+                    <li @(Model.SelectedGroup == group ? "active" : "")>
+                        <a class="button" asp-controller="Chat" asp-action="Chat" asp-route-groupId="@group.Id">@group.GroupName</a>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-success" asp-controller="Chat" asp-action="Groups">All Groups</a>
+        </div>
+    </div>
 </aside>
+
 <section class="msger">
-    @if (Model.SelectedGroup != null)
+    @if (Model.SelectedGroup == null)
     {
         <header class="msger-header">
             <ul class="socialicon">
@@ -32,25 +41,22 @@
                 <li><a asp-controller="Chat" asp-action="Chat"><i class="fa fa-comments-o"></i></a></li>
                 <li><a asp-controller="Home" asp-action="Privacy"><i class="fa fa-user-secret"></i></a></li>
             </ul>
-                <p class="text-center">@Model.SelectedGroup.GroupName.ToUpper()</p>
+            <p class="text-center">Global Chat</p>
         </header>
 
         @if (Model.Messages != null)
         {
             <main class="msger-chat">
-                @foreach (var message in Model.Messages.OrderBy(msg => msg.dateTime))
+                @foreach (var message in Model.Messages.Where(msg => msg.GroupId == null).OrderBy(msg => msg.dateTime))
                 {
-                    MailAddress email = new MailAddress(message.UserName);
-                    var time = message.dateTime.ToString("h:mm:tt");
-                    var userName = email.User;
-
                     <div class="msg @(message.UserName == User.Identity.Name ? "right-msg" : "left-msg")">
-                        <div class="msg-img" style=""></div>
+                        <div class="msg-img" style="background-image: url('/Assets/avatarPlaceholder.jpg')">
+                        </div>
 
                         <div class="msg-bubble">
                             <div class="msg-info">
-                                <div class="msg-info-name">@userName</div>
-                                <div class="msg-info-time">@time</div>
+                                <div class="msg-info-name">@message.UserName</div>
+                                <div class="msg-info-time">@message.dateTime.ToString("h:mm:tt")</div>
                             </div>
 
                             <div class="msg-text">@message.Text</div>
@@ -59,13 +65,59 @@
                 }
             </main>
         }
+
         <div class="msger-inputarea">
-                <input type="text" class="form-control" id="groupMessageInput" placeholder="Enter your message..."/>
+            <div class="form-outline msger-input">
+                <input type="text" class="form-control" id="groupMessageInput" placeholder="Enter your message..." />
+                <label class="form-label" for="groupMessageInput"></label>
+            </div>
+            <button id="groupSendButton" data-group-itemid="null" class="msger-send-btn">Send</button>
+        </div>
+    }
+    else if (Model.Messages != null)
+    {
+        <header class="msger-header">
+            <ul class="socialicon">
+                <li><a asp-controller="Home" asp-action="Index"><i class="fa fa-home"></i></a></li>
+                <li><a asp-controller="Cars" asp-action="Land"><i class="fa fa-car"></i></a></li>
+                <li><a asp-controller="Chat" asp-action="Chat"><i class="fa fa-comments-o"></i></a></li>
+                <li><a asp-controller="Home" asp-action="Privacy"><i class="fa fa-user-secret"></i></a></li>
+            </ul>
+            <p class="text-center">@Model.SelectedGroup.GroupName.ToUpper()</p>
+        </header>
+
+        @if (Model.Messages != null)
+        {
+            <main class="msger-chat">
+                @foreach (var message in Model.Messages.Where(msg => msg.GroupId == Model.SelectedGroup.Id).OrderBy(msg => msg.dateTime))
+                {
+                    <div class="msg @(message.UserName == User.Identity.Name ? "right-msg" : "left-msg")">
+                        <div class="msg-img" style="background-image: url('/Assets/avatarPlaceholder.jpg')">
+                        </div>
+
+                        <div class="msg-bubble">
+                            <div class="msg-info">
+                                <div class="msg-info-name">@message.UserName</div>
+                                <div class="msg-info-time">@message.dateTime.ToString("h:mm:tt")</div>
+                            </div>
+
+                            <div class="msg-text">@message.Text</div>
+                        </div>
+                    </div>
+                }
+            </main>
+        }
+
+        <div class="msger-inputarea">
+            <div class="form-outline msger-input">
+                <input type="text" class="form-control" id="groupMessageInput" placeholder="Enter your message..." />
+                <label class="form-label" for="groupMessageInput"></label>
+            </div>
             <button id="groupSendButton" data-group-itemid="@Model.SelectedGroup.Id" class="msger-send-btn">Send</button>
         </div>
     }
-
 </section>
+
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

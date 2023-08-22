@@ -109,10 +109,21 @@ namespace CarEnthusiast.Hubs
 
             if (user == null || string.IsNullOrWhiteSpace(groupName))
             {
-                // Handle invalid input or user not found //TODO
+                // Handle invalid input or user not found
                 return;
             }
 
+            // Check if a group with the same name already exists
+            var existingGroup = await _context.Groups.FirstOrDefaultAsync(g => g.GroupName == groupName);
+
+            if (existingGroup != null)
+            {
+                // Notify the client that the group name already exists
+                await Clients.Caller.SendAsync("GroupAlreadyExists", groupName);
+                return;
+            }
+
+            // Create the new group
             var group = new Group
             {
                 GroupName = groupName

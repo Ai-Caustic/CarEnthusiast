@@ -105,7 +105,11 @@ app.UseEndpoints(endpoints =>
         pattern: "{controller=Chat}/{action=Chat}/{groupId?}",
         defaults: new { controller = "Chat", action = "Chat" });
 
-    // ... other routes ...
+    endpoints.MapControllerRoute(
+        name: "gallery",
+        pattern: "Gallery/{page?}",
+        defaults: new { controller = "YourControllerName", action = "Gallery" }
+    );
 });
 
 
