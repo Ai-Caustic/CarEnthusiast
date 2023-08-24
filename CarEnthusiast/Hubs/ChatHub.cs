@@ -65,8 +65,6 @@ namespace CarEnthusiast.Hubs
 
                     //Add User to Group
                     await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-
-                    //await Clients.Caller.SendAsync("GroupJoined", groupId);
                 }
                 else
                 {
@@ -103,7 +101,7 @@ namespace CarEnthusiast.Hubs
             }
         }
 
-        public async Task CreateGroup(string groupName)
+        public async Task CreateGroup(string groupName, string groupDesc)
         {
             var user = await _userManager.GetUserAsync(Context.User);
 
@@ -126,7 +124,8 @@ namespace CarEnthusiast.Hubs
             // Create the new group
             var group = new Group
             {
-                GroupName = groupName
+                GroupName = groupName,
+                GroupDescription = groupDesc
             };
 
             _context.Groups.Add(group);
@@ -135,6 +134,27 @@ namespace CarEnthusiast.Hubs
             // Notify all clients that a new group has been created
             await Clients.All.SendAsync("NewGroupCreated", group);
         }
+
+        //Check if user is already in a group
+        public async Task CheckUserInGroup(int groupId)
+        {
+            var user = await _userManager.GetUserAsync(Context.User);
+
+            if (user != null)
+            {
+                var group = await _context.UserGroups.FirstOrDefaultAsync(ug => ug.UserId == user.Id && ug.GroupId == groupId);
+
+                if (group != null)
+                {
+                    await Clients.Caller.SendAsync("UserInGroup", true);
+                }
+                else
+                {
+                    await Clients.Caller.SendAsync("UserInGroup", false);
+                }
+            }
+        }
+
     }
 }
 
