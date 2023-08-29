@@ -7,11 +7,12 @@
 @{
     Layout = null;
 }
-
+<head>
+    <title>Chat | Groups</title>
 <link rel="stylesheet" href="~/css/site.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link rel="stylesheet" href="~/font-awesome-4.5.0/css/font-awesome.css">
-
+</head>
 
 <div class="allcontain">
     <div class="header">
@@ -148,30 +149,6 @@
         });
     };
 
-    // Handle the AlreadyJoinedGroup event
-    connection.on("AlreadyJoinedGroup", function (groupId) {
-        var groupCard = document.querySelector(`input[value='${groupId}']`).closest(".card");
-        var groupName = groupCard.querySelector(".card-title").textContent;
-        window.alert(`You are already in ${groupName}`);
-    });
-
-    // Handle the "View Messages" link click
-            var viewMessagesLinks = document.querySelectorAll(".card-link");
-            viewMessagesLinks.forEach(function (link) {
-            link.addEventListener("click", function (event) {
-            var groupCard = link.closest(".card");
-            var groupName = groupCard.querySelector(".card-title").textContent;
-            var groupIdStr = groupCard.querySelector("input[type=hidden]").value;
-            var groupId = parseInt(groupIdStr, 10);
-            var joined = groupCard.getAttribute("data-joined") === "true";
-
-            if (!joined) {
-                event.preventDefault();
-                window.alert(`You haven't joined ${groupName} yet. Join the group to view messages.`);
-            }
-        });
-    });
-
     // Handle creating groups
     document.getElementById("createGroupButton").addEventListener("click", function (event) {    
         event.preventDefault();
@@ -201,30 +178,46 @@
         window.alert(`The group name '${groupName}' already exists. Please choose a different name.`);
     });
 
-    //Check If User Is already in group
+    // Handle the AlreadyJoinedGroup event
+    connection.on("AlreadyJoinedGroup", function (groupId) {
+        var groupCard = document.querySelector(`input[value='${groupId}']`).closest(".card");
+        var groupName = groupCard.querySelector(".card-title").textContent;
+        window.alert(`You are already in ${groupName}`);
+    });
+
+@*     // Handle the "View Messages" link click
+    var viewMessagesLinks = document.querySelectorAll(".view-messages-link");
+    viewMessagesLinks.forEach(function (link) {
+        link.addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent the default link behavior
+
+            var groupId = link.getAttribute("data-group-id");
+
+            // Parse groupId as an integer
+            var groupIdInt = parseInt(groupId, 10);
+
+            // Check if the user is in the group
+            checkUserInGroup(groupIdInt);
+        });
+    });
+
+    // Check if the user is in the group and navigate or show an alert
     function checkUserInGroup(groupId) {
-        connection.invoke("CheckUserInGroup", groupId).then(function (response) {
+        // Parse groupId as an integer
+        var groupIdInt = parseInt(groupId, 10);
+
+        connection.invoke("CheckUserInGroup", groupIdInt).then(function (response) {
             if (response) {
-                // User is in the group, you can proceed to view messages or perform other actions.
-                window.location.href = `/Chat/Chat?groupId=${groupId}`;
+                // User is in the group, navigate to the "Chat" action with the groupId parameter as an integer
+                window.location.href = `/Chat/Chat?groupId=${groupIdInt}`;
             } else {
-                // User is not in the group, show an alert or take appropriate action.
+                // User is not in the group, show an alert
                 window.alert("You are not in this group. Please join the group to access messages.");
             }
         }).catch(function (err) {
             console.error(err.toString());
         });
-    }
-
-    // Handle the "View Messages" link click
-    var viewMessagesLinks = document.querySelectorAll(".view-messages-link");
-    viewMessagesLinks.forEach(function (link) {
-        link.addEventListener("click", function (event) {
-            var groupId = link.getAttribute("data-group-id");
-            checkUserInGroup(groupId);
-            event.preventDefault();
-        });
-    });
+    } *@
 
     connection.start().then(function () {
         console.log("SignalR Connection started successfully");

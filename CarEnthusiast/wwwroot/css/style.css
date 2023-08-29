@@ -10743,7 +10743,7 @@ address {
 
 @media (min-width: 1200px) {
     .bg-outer-space p {
-        color: #818587;
+        color: white;
     }
 }
 
@@ -10893,11 +10893,11 @@ address {
 }
 
 .section-angle-outher-space:before, .section-angle-outher-space:after {
-    background: #041c9c;
+    background: gray;
 }
 
 .section-angle-gray-lighter:before, .section-angle-gray-lighter:after {
-    background: #041c9c;
+    background: white;
 }
 
 .section-angle-white:before, .section-angle-white:after {

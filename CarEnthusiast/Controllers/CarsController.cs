@@ -11,10 +11,12 @@ using CarEnthusiast.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Azure;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Drawing.Printing;
 
 namespace CarEnthusiast.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class CarsController : Controller
     {
         private readonly UserContext _context;
@@ -26,18 +28,18 @@ namespace CarEnthusiast.Controllers
             _userManager = userManager;
         }
 
+        public IActionResult Index()
+        {
+            return View();
+        }
+
 
         public IActionResult Add()
         {
             return View();
         }
 
-        public IActionResult Test()
-        {
-            return View();
-        }
-
-        public async Task<IActionResult> Gallery(int page , int pageSize = 16)
+        public async Task<IActionResult> Test()
         {
             var user = await _userManager.GetUserAsync(User);
             var userId = user?.Id;
@@ -47,38 +49,23 @@ namespace CarEnthusiast.Controllers
                 .Where(c => c.UserId == userId)
                 .ToList();
 
-            // Calculate the total number of pages
-            var totalItems = userCars.Count();
-            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            return userCars != null ? View(userCars) : Problem("Entity Set 'Cars' is null");
+        }
 
-            // Validate the page number to ensure it's within bounds
-            if (page < 1)
-            {
-                page = 1;
-            }
-            else if (page > totalPages)
-            {
-                page = totalPages;
-            }
+        public async Task<IActionResult> Gallery()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var userId = user?.Id;
 
-            // Retrieve the cars for the current page
-            var currentPageCars = userCars
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
+            var userCars = _context.Cars
+                .Include(c => c.CarImages) // Include the CarImages navigation property
+                .Where(c => c.UserId == userId)
                 .ToList();
 
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = totalPages;
 
-            return View(currentPageCars);
+            return View(userCars);
         }
 
-
-
-        public IActionResult Contacts()
-        {
-            return View(); 
-        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -157,7 +144,7 @@ namespace CarEnthusiast.Controllers
                 }
                 await _context.SaveChangesAsync();
 
-                return View("Test");
+                return View("Gallery");
             }
 
             return View("Add");
@@ -177,31 +164,10 @@ namespace CarEnthusiast.Controllers
            // return View();
         }
 
-        // GET: Cars
-        public async Task<IActionResult> Index()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            var userId = user?.Id;
-
-            var userCars = _context.Cars
-                .Include(c => c.CarImages) // Include the CarImages navigation property
-                .Where(c => c.UserId == userId)
-                .ToList();
-
-            return userCars != null ? View(userCars) : Problem("Entity Set 'Cars' is null"); 
-
-        }
-
-
         public async Task<IActionResult> List()
         {
             var cars = await _context.Cars.Include(c => c.CarImages).ToListAsync();
             return View(cars);
-        }
-
-        public IActionResult Tester()
-        {
-            return View();
         }
 
         // GET: Cars/Details/5

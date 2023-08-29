@@ -43,4 +43,10 @@
     <Folder Include="FileUploader\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\fonts\flaticon\font\Flaticon.svg" />
+    <None Include="wwwroot\fonts\flaticon\font\_flaticon.scss" />
+    <None Include="wwwroot\fonts\flaticon\license\license.pdf" />
+  </ItemGroup>
+
 </Project>

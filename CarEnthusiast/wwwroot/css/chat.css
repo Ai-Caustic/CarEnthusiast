@@ -385,4 +385,30 @@ span {
     color: #777;
 }
 
+.logreg {
+    list-style-type: none;
+    display: inline-block;
+    font-family: "BebasNeue Regular";
+    font-size: 9pt;
+    color: #e7e7e7;
+    margin-bottom: 0px;
+    padding-left: 23%;
+}
+
+    .logreg > li {
+        float: left;
+    }
+
+        .logreg > li > p {
+            text-decoration: none;
+            color: #e7e7e7;
+            padding-right: 6px;
+            font-size: medium;
+        }
+
+            .logreg > li > p:hover {
+                color: #c59e47;
+            }
+
+ 
 

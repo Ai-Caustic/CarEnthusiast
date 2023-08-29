@@ -1,134 +1,353 @@
-﻿
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@model IEnumerable<Car>
 @{
     Layout = null;
 }
-@model IEnumerable<Car>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-
-<!DOCTYPE html>
-<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="~/fontawesome-4.5.0/css/fontawesome.min.css">
-    <link rel="stylesheet" href="~/css/emo-style.css">
+    <title>Cars | Gallery</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/magnific-popup.css">
+    <link rel="stylesheet" href="~/css/jquery-ui.css">
+    <link rel="stylesheet" href="~/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/css/owl.theme.default.min.css">
+
+    <link rel="stylesheet" href="~/css/lightgallery.min.css">
+
+    <link rel="stylesheet" href="~/css/bootstrap-datepicker.css">
+
+    <link rel="stylesheet" href="~/fonts/flaticon/font/flaticon.css">
+
+    <link rel="stylesheet" href="~/css/swiper.css">
+
+    <link rel="stylesheet" href="~/css/aos.css">
+
+    <link rel="stylesheet" href="~/css/single.css">
 
 </head>
+
 <body>
-    <!-- Page Loader -->
-    <div id="loader-wrapper">
-        <div id="loader"></div>
+    <div class="site-wrap">
 
-        <div class="loader-section section-left"></div>
-        <div class="loader-section section-right"></div>
-
-    </div>
-
-    <div id="header" class="container">
-        <div id="logo">
-            <h1><a href="#">ENTHU <span>SIAST</span></a></h1>
-        </div>
-        <div id="menu">
-            <ul>
-                <li class="current_page_item"><a href="#">Homepage</a></li>
-                <li><a href="#">Chat</a></li>
-                <li><a href="#">Groups</a></li>
-                <li><a href="#">Post Car</a></li>
-                <li><a href="#">Privacy</a></li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="container-fluid tm-container-content tm-mt-60">
-        <div class="row mb-4">
-            <h2 class="col-6 tm-text-primary">
-                Latest Photos
-            </h2>
-            <div class="col-6 d-flex justify-content-end align-items-center">
-                <form action="" class="tm-text-primary">
-                    Page <input type="text" value="@ViewBag.CurrentPage" size="1" class="tm-input-paging tm-text-primary"> of @ViewBag.TotalPages
-                </form>
+        <div class="site-mobile-menu">
+            <div class="site-mobile-menu-header">
+                <div class="site-mobile-menu-close mt-3">
+                    <span class="icon-close2 js-menu-toggle"></span>
+                </div>
             </div>
-
+            <div class="site-mobile-menu-body"></div>
         </div>
-        <div class="row tm-mb-90 tm-gallery">
-            @if (Model != null)
-            {
-                @foreach (var item in Model)
-                {
-                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-                        <figure class="effect-ming tm-video-item">
+
+
+
+
+        <header class="site-navbar py-3" role="banner">
+
+            <div class="container-fluid">
+                <div class="row align-items-center">
+
+                    <div class="col-6 col-xl-2" data-aos="fade-down">
+                        <h1 class="mb-0"><a asp-controller="Home" asp-action="Index" style="color:wheat">Enthusiast</a></h1>
+                    </div>
+                    <div class="col-10 col-md-8 d-none d-xl-block" data-aos="fade-down">
+                        <nav class="site-navigation position-relative text-right text-lg-center" role="navigation">
+
+                            <ul class="site-menu js-clone-nav mx-auto d-none d-lg-block">
+                                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                                <li> <a asp-controller="Chat" asp-action="Groups">Chat</a></li>
+                               @*  <li><a href="#">Services</a></li> *@
+                                <li><a asp-controller="Cars" asp-action="Add">Add new Car</a></li>
+                                <li><a asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+
+
+        <div class="site-section" data-aos="fade">
+            <div class="container-fluid">
+
+                <div class="row justify-content-center">
+
+                    <div class="col-md-7">
+                        <div class="row mb-5">
+                            <div class="col-12 ">
+                                <h2 class="site-section-heading text-center">Gallery</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row" id="lightgallery">
+                    @if(SignInManager.IsSignedIn(User))
+                    {
+                    @if (Model != null)
+                    {
+                        @foreach (var item in Model)
+                        {
                             @if (item.CarImages != null && item.CarImages.Count > 0)
                             {
-                                <div id="carousel-@item.Id" class="carousel slide" data-bs-ride="carousel">
-                                    <div class="carousel-inner">
-                                        @for (int k = 0; k < item.CarImages.Count; k++)
-                                        {
-                                            var imageData = item.CarImages[k].ImageData;
-                                            var imageBase64 = Convert.ToBase64String(imageData);
-                                            var imageUrl = $"data:image/jpg;base64,{imageBase64}";
-
-                                            <div class="carousel-item @(k == 0 ? "active" : "")">
-                                                <img src="@imageUrl" alt="Car Image" class="img-fluid custom-image-size">
-                                            </div>
-                                        }
+                                    @for (int k = 0; k < item.CarImages.Count; k++)
+                                    {
+                                    var imageData = item.CarImages[k].ImageData;
+                                    var imageBase64 = Convert.ToBase64String(imageData);
+                                    var imageUrl = $"data:image/jpg;base64,{imageBase64}";
+                                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade" data-src="@imageUrl" data-sub-html="<h2>@item.Make</h2><h3>@item.Model</h3><h4>@item.Showroom</h4><p>@item.Year</p>">
+                                        <a href="#"><img src="@imageUrl" alt="@item.Model" class="img-fluid custom-img"></a>
                                     </div>
-                                    <a class="carousel-control-prev" href="#carousel-@item.Id" role="button" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                    </a>
-                                    <a class="carousel-control-next" href="#carousel-@item.Id" role="button" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                    </a>
-                                </div>
+                                    }
                             }
                             else
                             {
-                                <p>No image available</p>
+                                <p>No images available</p>
                             }
-                            <figcaption class="d-flex align-items-center justify-content-center">
-                                <h2>@Html.DisplayFor(modelItem => item.Make)</h2>
-                                <a href="photo-detail.html">View more</a>
-                            </figcaption>
-                        </figure>
-                        <div class="d-flex justify-content-between tm-text-gray">
-                            <span class="tm-text-gray-light">18 Oct 2020</span>
-                            <span>9,906 views</span>
+                        }
+                        }
+                    }
+                    else
+                    {
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_1.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor doloremque hic excepturi fugit, sunt impedit fuga tempora, ad amet aliquid?</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_1.jpg" id="image1" alt="IMage" class="img-fluid"></a>
                         </div>
-                    </div>
-                }
-            }
-            else
-            {
-                <p>No cars available in the model.</p>
-            }
-        </div> <!-- row -->
-        <div class="row tm-mb-90">
-            <div class="col-12 d-flex justify-content-between align-items-center tm-paging-col">
-                @if (ViewBag.CurrentPage > 1)
-                {
-                    <a href="/Gallery?page=@(ViewBag.CurrentPage - 1)" class="btn btn-primary tm-btn-prev mb-2">Previous</a>
-                }
-                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
-                {
-                    <a href="/Gallery?page=@(ViewBag.CurrentPage + 1)" class="btn btn-primary tm-btn-next">Next Page</a>
-                }
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_2.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam omnis quaerat molestiae, praesentium. Ipsam, reiciendis. Aut molestiae animi earum laudantium.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_2.jpg" id="image2" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_3.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem reiciendis, dolorum illo temporibus culpa eaque dolore rerum quod voluptate doloribus.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_3.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_4.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim perferendis quae iusto omnis praesentium labore tempore eligendi quo corporis sapiente.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_4.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_5.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe, voluptatum voluptate tempore aliquam, dolorem distinctio. In quas maiores tenetur sequi.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_5.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_6.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum cum culpa blanditiis illum, voluptatum iusto quisquam mollitia debitis quaerat maiores?</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_6.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_7.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores similique impedit possimus, laboriosam enim at placeat nihil voluptatibus voluptate hic!</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_7.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_8.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quam vitae sed cum mollitia itaque soluta laboriosam eaque sit ratione, aliquid.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_8.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_9.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem reiciendis debitis beatae facilis quos, enim quis nobis magnam architecto earum!</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_9.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_9.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque officiis magnam, facilis nam eos perspiciatis eligendi pariatur numquam debitis quos!</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_9.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_8.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis consequatur quam et, delectus, cum iste ipsa animi eligendi obcaecati nemo.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_8.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_7.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci quia illo voluptatibus numquam inventore, ab asperiores molestiae distinctio atque nihil.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_7.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_6.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt unde placeat obcaecati sapiente illum, fuga nostrum necessitatibus delectus maiores magnam.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_6.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_5.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptas dignissimos non consectetur. Facilis totam, explicabo nam iure! Veniam modi, molestiae.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_5.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_4.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias minus voluptatibus inventore odio. Iure amet nesciunt a, officia quo ex.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_4.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_3.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Praesentium illum consectetur dolorum consequuntur sint doloribus eveniet deleniti! Illo, quibusdam, earum.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_3.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_2.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto ad iure, inventore asperiores, cupiditate optio dignissimos labore quidem totam. Dignissimos.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_2.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_1.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nam temporibus totam similique provident delectus quos fugiat officia earum nisi voluptatibus?</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_1.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+
+
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_1.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe beatae qui aliquid nostrum unde ut officiis omnis delectus sequi deleniti!</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_1.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_2.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi iusto vero, soluta porro dicta quaerat tempore magni perferendis aspernatur cupiditate.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_2.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_3.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque, minus officiis modi ducimus reprehenderit at ea voluptatum consequuntur enim nulla.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_3.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_4.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis eligendi hic sed, quidem illum ipsa, cum tempora quo reiciendis accusantium.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_4.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_5.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex blanditiis quaerat numquam repellendus pariatur commodi neque animi voluptatum illum dolore?</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_5.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_6.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio praesentium maiores, veritatis illum voluptas alias aut unde esse aliquam itaque.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_6.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_7.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt fugit, non facilis dignissimos minima nostrum nesciunt adipisci, quibusdam cum reprehenderit.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_7.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_8.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos iure delectus obcaecati atque fugit enim quaerat suscipit tenetur in ratione?</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_8.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_9.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa neque, eos quae eaque officia, repellendus dolore tempore cumque quibusdam? Maxime?</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_9.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_9.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam, unde quis minus ex impedit necessitatibus nostrum, neque veniam repellat officiis!</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_9.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_8.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel eveniet sequi assumenda deserunt ab, tempora commodi autem debitis iusto sed.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_8.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_7.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempore, quasi, pariatur. Minima provident repellat cum, impedit, nemo exercitationem distinctio consequuntur.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_7.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_6.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus nostrum expedita consequatur rerum laboriosam tempore nisi autem animi eveniet perspiciatis.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_6.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_5.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eaque consectetur error deserunt facilis facere, consequatur at officia quae culpa voluptatibus!</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_5.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_4.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corrupti minima porro, hic dolores. Ab, doloremque facilis numquam, ipsa repellendus voluptas.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_4.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_3.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio, dolor alias. Dignissimos hic voluptatibus dolorum expedita recusandae, consequatur distinctio est.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_3.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_2.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum similique, dolore esse quaerat incidunt ullam sit neque laboriosam velit quas.</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_2.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                        <div class="col-sm-6 col-md-4 col-lg-3 col-xl-3 item" data-aos="fade"
+                             data-src="/Assets/gallery/big-images/nature_big_1.jpg"
+                             data-sub-html="<h4>Fading Light</h4><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem tempora deleniti, consectetur quisquam labore vitae quod quae debitis hic ab!</p>">
+                            <a href="#"><img src="~/Assets/gallery/nature_small_1.jpg" alt="IMage" class="img-fluid"></a>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
-    </div> <!-- container-fluid, tm-container-content -->
 
-    <div class="text-center">
-    <a class="btn btn-primary " asp-controller="Cars" asp-action="Add">Add New Entry</a>
+        <div class="footer py-4">
+            <div class="container-fluid text-center">
+                <p>
+                    
+                    Copyright &copy;<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>document.write(new Date().getFullYear());</script> This site was made by <i class="icon-heart-o" aria-hidden="true"></i> by <a href="#" target="_blank">Slimeto</a>
+                    
+                </p>
+            </div>
+        </div>
+
+
+
+
+
     </div>
-    <script src="~/js/plugins.js"></script>
+    <script src="~/js/jquery.min.js"></script>
+    <script src="js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="~/js/jquery-ui.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/js/owl.carousel.min.js"></script>
+    <script src="~/js/jquery.stellar.min.js"></script>
+    <script src="~/js/jquery.countdown.min.js"></script>
+    <script src="~/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/js/swiper.min.js"></script>
+    <script src="~/js/aos.js"></script>
+
+    <script src="~/js/picturefill.min.js"></script>
+    <script src="~/js/lightgallery-all.min.js"></script>
+    <script src="~/js/jquery.mousewheel.min.js"></script>
+
+    <script src="~/js/main.js"></script>
+
     <script>
-        $(window).on("load", function () {
-            $('body').addClass('loaded');
+        $(document).ready(function () {
+            $('#lightgallery').lightGallery();
         });
     </script>
-</body>
-</html>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>

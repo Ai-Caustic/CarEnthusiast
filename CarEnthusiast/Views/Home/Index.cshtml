@@ -10,6 +10,7 @@
 <html lang="en">
 
 <head>
+    <title>Home</title>
     <!-- basic -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,41 +31,13 @@
     <link rel="stylesheet" href="~/css/jquery.mCustomScrollbar.min.css">
     <!-- awesome fontfamily -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
 </head>
 <!-- body -->
 
 <body class="main-layout">
 
     <div class="wrapper">
-
-        <div class="sidebar">
-            <!-- Sidebar  -->
-            <nav id="sidebar">
-
-                <div id="dismiss">
-                    <i class="fa fa-arrow-left"></i>
-                </div>
-
-                <ul class="list-unstyled components">
-                    <li>
-                        <a asp-controller="Cars" asp-action="Land">Cars</a>
-                    </li>
-                    <li>
-                        <a asp-controller="Chat" asp-action="Chat">Chat</a>
-                    </li>
-                    <li>
-                        <a asp-controller="Chat" asp-action="Groups">Groups</a>
-                    </li>
-                </ul>
-
-            </nav>
-        </div>
-
-
         <div id="content">
-
-
             <!-- section -->
             <section id="home" class="top_section">
                 <div class="row">
@@ -93,11 +66,6 @@
                                                     <li>
                                                         <img style="margin-right: 15px;" src="~/Assets/images/mail_icon.png" alt="#" /><a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = ""})">@username</a>
                                                     </li>
-                                                    <li>
-                                                        <button type="button" id="sidebarCollapse">
-                                                            <img src="~/Assets/images/menu_icon.png" alt="#" />
-                                                        </button>
-                                                    </li>
                                                 }
                                                 else
                                                 {
@@ -108,11 +76,6 @@
                                                         <a class="" id="login" asp-area="Identity" asp-page="/Account/Login">
                                                             <img src="~/Assets/images/login.png" alt="#" />
                                                         </a>
-                                                    </li>
-                                                    <li>
-                                                        <button type="button" id="sidebarCollapse">
-                                                            <img src="~/Assets/images/menu_icon.png" alt="#" />
-                                                        </button>
                                                     </li>
                                                 }
                                             </ul>
@@ -130,13 +93,13 @@
                                             <h4>Welcome</h4>
                                             <h3>Enthusiasts</h3>
                                             <p>
-                                                It is a long established fact that a reader will be distracted by the readable
-                                                content of a page when looking at its layout.
+                                                A whole new space where car lovers and enthusiasts can meet
+                                                and share interests.
                                             </p>
                                             <div class="button_section">
                                                 @if (SignInManager.IsSignedIn(User))
                                                 {
-                                                    <a asp-controller="Cars" asp-action="Land">Cars</a>
+                                                    <a asp-controller="Cars" asp-action="Index">Cars</a>
                                                     <a asp-controller="Chat" asp-action="Chat">Chat</a>
                                                 }
                                                 else
@@ -158,16 +121,7 @@
                                                     <img src="~/Assets/images/slider_2.png" alt="#" />
                                                 </div>
                                             </div>
-                                            <div class="full center">
-                                                <a class="carousel-control-prev" href="#slider_main" data-slide="prev">
-                                                    <i class="fa fa-angle-left" aria-hidden="true"></i>
-                                                </a>
-                                                <a class="carousel-control-next" href="#slider_main" data-slide="next">
-                                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
-                                                </a>
-                                            </div>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                         </section>
@@ -184,11 +138,11 @@
 
                         <div class="col-lg-4 margin_top_30">
                             <div class="full margin_top_30">
-                                <h3 class="main_heading _left_side margin_top_30">Privacy Policy</h3>
-                                <p class="large">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod..</p>
+                                <h3 class="main_heading _left_side margin_top_30">Gallery</h3>
+                                <p class="large">We have an assortment of user submitted cars for viewing pleasure</p>
                             </div>
                             <div class="full button_section margin_top_30">
-                                <a asp-controller="Home" asp-action="Privacy">Read More</a>
+                                <a asp-controller="Cars" asp-action="Gallery">Dive in</a>
                             </div>
                         </div>
 
@@ -218,7 +172,7 @@
                         <div class="col-lg-4 margin_top_30">
                             <div class="full margin_top_30">
                                 <h3 class="main_heading _left_side margin_top_30">Your Cars</h3>
-                                <p class="large">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod..</p>
+                                <p class="large">Sign in to see cars that you have submitted</p>
                             </div>
                             <div class="full button_section margin_top_30">
                                 <a asp-controller="Cars" asp-action="Gallery">See More</a>
@@ -252,7 +206,6 @@
     <!-- Javascript files-->
     <script src="~/js/jquery.min.js"></script>
     <script src="~/js/popper.min.js"></script>
-    <script src="~/js/bootstrap.bundle.min.js"></script>
     <!-- Scrollbar Js Files -->
     <script src="~/js/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="~/js/custom.js"></script>
@@ -275,27 +228,6 @@
             });
         });
     </script>
-
-    <script>
-        // This example adds a marker to indicate the position of Bondi Beach in Sydney,
-        // Australia.
-        function initMap() {
-            var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 11,
-                center: { lat: 40.645037, lng: -73.880224 },
-            });
-
-            var image = 'images/location_point.png';
-            var beachMarker = new google.maps.Marker({
-                position: { lat: 40.645037, lng: -73.880224 },
-                map: map,
-                icon: image
-            });
-        }
-    </script>
-    <!-- google map js -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8eaHt9Dh5H57Zh0xVTqxVdBFCvFMqFjQ&callback=initMap"></script>
-    <!-- end google map js -->
 
 </body>
 

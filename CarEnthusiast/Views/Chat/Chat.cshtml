@@ -1,14 +1,19 @@
-﻿
+﻿@using Microsoft.AspNetCore.Identity
 @using System.Net.Mail
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @model GroupChatViewModel
 
 @{
     Layout = null;
 }
 
+<head>
+<title>Chat</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <link rel="stylesheet" href="~/css/chat.css" />
 <link rel="stylesheet" href="~/font-awesome-4.5.0/css/font-awesome.css">
+</head>
 
 <aside class="sidebar">
     <div class="card text-center">
@@ -42,6 +47,17 @@
                 <li><a asp-controller="Home" asp-action="Privacy"><i class="fa fa-user-secret"></i></a></li>
             </ul>
             <p class="text-center">Global Chat</p>
+            <ul class="logreg">
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    MailAddress email = new MailAddress(UserManager.GetUserName(User));
+                    var username = email.User;
+                    <li>
+                        <p id="greetings">Welcome @username</p>
+                    </li>
+
+                }
+            </ul>
         </header>
 
         @if (Model.Messages != null)

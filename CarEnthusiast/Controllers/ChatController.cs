@@ -10,7 +10,7 @@ using AuthorizeAttribute = Microsoft.AspNetCore.Authorization.AuthorizeAttribute
 
 namespace CarEnthusiast.Controllers
 {
-    
+    [Authorize]
     public class ChatController : Controller
     {
 
