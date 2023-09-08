@@ -57,16 +57,26 @@
 <div class="card-container">
     @foreach (var group in Model)
     {
+        var groupImage = group.GroupImage;
         <div id="card-@group.Id" class="card mb-3">
+            @if (groupImage != null)
+            {
+                var imageBase64 = Convert.ToBase64String(groupImage);
+                var imageUrl = $"data:image/jpg;base64,{imageBase64}";
+                <img src="@imageUrl" alt="@group.GroupName image">
+            }
+            else
+            {
             <img src="~/Assets/groupPlaceholder.jpg" class="card-img-top" alt="Group Image">
+            }
             <div class="card-body">
                 <h5 class="card-title">@group.GroupName</h5>
                 <h6 class="card-subtitle mb-2 text-muted">
                     @group.GroupDescription
                 </h6>
-                @* <p class="card-text">
-                </p> *@
                 <input type="hidden" id="groupId" value="@group.Id" /> <!-- Add group ID -->
+                <input type="hidden" id="groupName" value="@group.GroupName" />
+                <input type="hidden" id="inGroup" />
                 <button type="button" class="btn btn-primary joinButton">Join</button>
                 <a class="card-link view-messages-link" asp-controller="Chat" asp-action="Chat" asp-route-groupId="@group.Id" data-group-id="@group.Id">View Messages</a>
             </div>
@@ -104,6 +114,8 @@
                     <input type="text" name="groupName" id="groupName" required />
                     <label for="groupDesc">Group Description: </label>
                     <input type="text" name="groupDesc" id="groupDesc" maxlength="500" required />
+                    <label for="groupImage">Group Image:</label>
+                    <input type="file" accept="image/*" id="groupImage" name="groupImage" required/>
                     <button type="submit" id="createGroupButton">Create Group</button>
                 </form>
             </div>
@@ -117,112 +129,4 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="/_framework/aspnetcore-browser-refresh.js"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
-<script>
-    var connection = new signalR.HubConnectionBuilder().withUrl("/ChatHub").build();
-
-    document.getElementById("createGroupForm").addEventListener("submit", function (event) {
-        event.preventDefault();
-        var groupName = document.getElementById("groupName").value;
-        console.log(`${groupName} group create attempt`);
-        connection.invoke("CreateGroup", groupName).catch(function (err) {
-            return console.error(err.toString());
-        });
-    });
-
-    // Handle joining groups
-    window.onload = () => {
-        var joinButtons = document.querySelectorAll(".joinButton");
-        joinButtons.forEach(function (button) {
-            button.addEventListener("click", function (event) {
-                var groupCard = button.closest(".card"); // Get the closest parent card element
-                var groupName = groupCard.querySelector(".card-title").textContent; // Get the group name
-                var groupIdStr = groupCard.querySelector("input[type=hidden]").value; // Get the group ID
-                var groupId = parseInt(groupIdStr, 10);
-
-                console.log(`Group ${groupName} join attempt`);
-
-                connection.invoke("JoinGroup", groupId, groupName).catch(function (err) {
-                    console.log("Group join failed due to", err);
-                    return console.error(err.toString());
-                });
-            });
-        });
-    };
-
-    // Handle creating groups
-    document.getElementById("createGroupButton").addEventListener("click", function (event) {    
-        event.preventDefault();
-        var groupName = document.getElementById("groupName").value;
-        var groupDesc = document.getElementById("groupDesc").value;
-
-        // Add validation for group name TODO:
-        console.log(`${groupName} group create attempt`);
-
-        // Invoke the CreateGroup method
-        connection.invoke("CreateGroup", groupName, groupDesc).catch(function (err) {
-            return console.error(err.toString());
-        });
-
-        // Close the modal
-        $("#createGroupModal").modal("hide");
-    });
-
-    // Add an event listener to the modal to clear the form when it is hidden
-    $("#createGroupModal").on("hidden.bs.modal", function () {
-        document.getElementById("createGroupForm").reset();
-    });
-
-    // Handle the GroupAlreadyExists event
-    connection.on("GroupAlreadyExists", function (groupName) {
-        // Show an alert or update the UI to inform the user
-        window.alert(`The group name '${groupName}' already exists. Please choose a different name.`);
-    });
-
-    // Handle the AlreadyJoinedGroup event
-    connection.on("AlreadyJoinedGroup", function (groupId) {
-        var groupCard = document.querySelector(`input[value='${groupId}']`).closest(".card");
-        var groupName = groupCard.querySelector(".card-title").textContent;
-        window.alert(`You are already in ${groupName}`);
-    });
-
-@*     // Handle the "View Messages" link click
-    var viewMessagesLinks = document.querySelectorAll(".view-messages-link");
-    viewMessagesLinks.forEach(function (link) {
-        link.addEventListener("click", function (event) {
-            event.preventDefault(); // Prevent the default link behavior
-
-            var groupId = link.getAttribute("data-group-id");
-
-            // Parse groupId as an integer
-            var groupIdInt = parseInt(groupId, 10);
-
-            // Check if the user is in the group
-            checkUserInGroup(groupIdInt);
-        });
-    });
-
-    // Check if the user is in the group and navigate or show an alert
-    function checkUserInGroup(groupId) {
-        // Parse groupId as an integer
-        var groupIdInt = parseInt(groupId, 10);
-
-        connection.invoke("CheckUserInGroup", groupIdInt).then(function (response) {
-            if (response) {
-                // User is in the group, navigate to the "Chat" action with the groupId parameter as an integer
-                window.location.href = `/Chat/Chat?groupId=${groupIdInt}`;
-            } else {
-                // User is not in the group, show an alert
-                window.alert("You are not in this group. Please join the group to access messages.");
-            }
-        }).catch(function (err) {
-            console.error(err.toString());
-        });
-    } *@
-
-    connection.start().then(function () {
-        console.log("SignalR Connection started successfully");
-    }).catch(function (err) {
-        return console.error(err.toString());
-    });
-
-</script>
+<script src="~/js/groups.js"></script>

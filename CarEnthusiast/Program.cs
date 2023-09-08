@@ -23,7 +23,10 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<UserContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddRazorPages();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(e => {
+    e.EnableDetailedErrors = true;
+    e.MaximumReceiveMessageSize = 102400000;
+});
 
 builder.Services.AddControllers();
 

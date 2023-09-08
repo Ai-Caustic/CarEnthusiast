@@ -101,7 +101,7 @@ namespace CarEnthusiast.Hubs
             }
         }
 
-        public async Task CreateGroup(string groupName, string groupDesc)
+        public async Task CreateGroup(string groupName, string groupDesc, string baseString)
         {
             var user = await _userManager.GetUserAsync(Context.User);
 
@@ -121,11 +121,14 @@ namespace CarEnthusiast.Hubs
                 return;
             }
 
+            byte[] groupImage = Convert.FromBase64String(baseString);
+
             // Create the new group
             var group = new Group
             {
                 GroupName = groupName,
-                GroupDescription = groupDesc
+                GroupDescription = groupDesc,
+                GroupImage = groupImage // Assign the decoded image bytes
             };
 
             _context.Groups.Add(group);

@@ -15,11 +15,6 @@ namespace CarEnthusiast.Models
 
         public ICollection<Message> Messages { get; set; } = new List<Message>();
 
-        
-        //public virtual ICollection<Message> Messages { get; set; }
-
-        //public int CarId { get; set; }
-        //public ICollection<Car>? Cars { get; set; }
     }
 
 
